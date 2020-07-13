@@ -86,47 +86,15 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./app/index.jsx":
-/*!***********************!*\
-  !*** ./app/index.jsx ***!
-  \***********************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ "./app/style.css");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-console.log({
-  styles: _style_css__WEBPACK_IMPORTED_MODULE_2___default.a
-});
-
-var App = function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
-    className: _style_css__WEBPACK_IMPORTED_MODULE_2___default.a.red
-  }, " Hello world ");
-};
-
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById("root"));
-
-/***/ }),
-
-/***/ "./app/style.css":
-/*!***********************!*\
-  !*** ./app/style.css ***!
-  \***********************/
+/***/ "./app/app.css":
+/*!*********************!*\
+  !*** ./app/app.css ***!
+  \*********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 var api = __webpack_require__(/*! ../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-            var content = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js??ref--4-1!./style.css */ "./node_modules/css-loader/dist/cjs.js?!./app/style.css");
+            var content = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js??ref--4-1!./app.css */ "./node_modules/css-loader/dist/cjs.js?!./app/app.css");
 
             content = content.__esModule ? content.default : content;
 
@@ -147,10 +115,395 @@ module.exports = content.locals || {};
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js?!./app/style.css":
-/*!***********************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ref--4-1!./app/style.css ***!
-  \***********************************************************************/
+/***/ "./app/app.jsx":
+/*!*********************!*\
+  !*** ./app/app.jsx ***!
+  \*********************/
+/*! exports provided: App */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "App", function() { return App; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _game_play__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-play */ "./app/game-play/index.js");
+/* harmony import */ var _game_panel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game-panel */ "./app/game-panel/index.js");
+/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.css */ "./app/app.css");
+/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_app_css__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+var App = function App() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _app_css__WEBPACK_IMPORTED_MODULE_3___default.a.container
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_1__["GamePlay"], {
+    gameSettings: {
+      nBack: 1
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_2__["GamePanel"], null));
+};
+
+/***/ }),
+
+/***/ "./app/game-panel/constants.js":
+/*!*************************************!*\
+  !*** ./app/game-panel/constants.js ***!
+  \*************************************/
+/*! exports provided: MAX_N_BACK */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_N_BACK", function() { return MAX_N_BACK; });
+var MAX_N_BACK = 10;
+
+/***/ }),
+
+/***/ "./app/game-panel/game-panel.css":
+/*!***************************************!*\
+  !*** ./app/game-panel/game-panel.css ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js??ref--4-1!./game-panel.css */ "./node_modules/css-loader/dist/cjs.js?!./app/game-panel/game-panel.css");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./app/game-panel/game-panel.jsx":
+/*!***************************************!*\
+  !*** ./app/game-panel/game-panel.jsx ***!
+  \***************************************/
+/*! exports provided: GamePanel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamePanel", function() { return GamePanel; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _n_back_input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./n-back-input */ "./app/game-panel/n-back-input.jsx");
+/* harmony import */ var _start_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./start-button */ "./app/game-panel/start-button.jsx");
+/* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer */ "./app/game-panel/timer.jsx");
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+var GamePanel = function GamePanel() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default.a.gamePanel
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_n_back_input__WEBPACK_IMPORTED_MODULE_1__["NBackInput"], {
+    onChange: console.log
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_start_button__WEBPACK_IMPORTED_MODULE_2__["StartButton"], {
+    onClick: function onClick() {
+      return console.log("start");
+    }
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_timer__WEBPACK_IMPORTED_MODULE_3__["Timer"], {
+    time: "23.23.12"
+  }));
+};
+
+/***/ }),
+
+/***/ "./app/game-panel/index.js":
+/*!*********************************!*\
+  !*** ./app/game-panel/index.js ***!
+  \*********************************/
+/*! exports provided: GamePanel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _game_panel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game-panel */ "./app/game-panel/game-panel.jsx");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GamePanel", function() { return _game_panel__WEBPACK_IMPORTED_MODULE_0__["GamePanel"]; });
+
+
+
+/***/ }),
+
+/***/ "./app/game-panel/n-back-input.jsx":
+/*!*****************************************!*\
+  !*** ./app/game-panel/n-back-input.jsx ***!
+  \*****************************************/
+/*! exports provided: NBackInput */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NBackInput", function() { return NBackInput; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./app/game-panel/constants.js");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_2__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var arrayFromOneToN = function arrayFromOneToN(n) {
+  var res = [];
+
+  for (var i = 1; i <= n; i++) {
+    res.push(i);
+  }
+
+  return res;
+};
+
+var fromOneToN = arrayFromOneToN(_constants__WEBPACK_IMPORTED_MODULE_1__["MAX_N_BACK"]);
+var NBackInput = function NBackInput(_ref) {
+  var onChange = _ref.onChange;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
+      _useState2 = _slicedToArray(_useState, 2),
+      value = _useState2[0],
+      setValue = _useState2[1];
+
+  var onSelect = function onSelect(event) {
+    var newValue = event.target.value;
+    if (value !== newValue) setValue(newValue);
+    onChange(newValue);
+  };
+
+  var options = fromOneToN.map(function (nBack) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+      value: nBack,
+      key: nBack
+    }, nBack);
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_2___default.a.timer
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "n-back:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    name: "n-backs",
+    onChange: onSelect,
+    value: value
+  }, options)));
+};
+
+/***/ }),
+
+/***/ "./app/game-panel/start-button.jsx":
+/*!*****************************************!*\
+  !*** ./app/game-panel/start-button.jsx ***!
+  \*****************************************/
+/*! exports provided: StartButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StartButton", function() { return StartButton; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var StartButton = function StartButton(_ref) {
+  var onClick = _ref.onClick;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer,
+    onClick: onClick
+  }, "Start");
+};
+
+/***/ }),
+
+/***/ "./app/game-panel/timer.css":
+/*!**********************************!*\
+  !*** ./app/game-panel/timer.css ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js??ref--4-1!./timer.css */ "./node_modules/css-loader/dist/cjs.js?!./app/game-panel/timer.css");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./app/game-panel/timer.jsx":
+/*!**********************************!*\
+  !*** ./app/game-panel/timer.jsx ***!
+  \**********************************/
+/*! exports provided: Timer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Timer", function() { return Timer; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var Timer = function Timer(_ref) {
+  var time = _ref.time;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer
+  }, time);
+};
+
+/***/ }),
+
+/***/ "./app/game-play/game-play.css":
+/*!*************************************!*\
+  !*** ./app/game-play/game-play.css ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js??ref--4-1!./game-play.css */ "./node_modules/css-loader/dist/cjs.js?!./app/game-play/game-play.css");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+
+/***/ "./app/game-play/game-play.jsx":
+/*!*************************************!*\
+  !*** ./app/game-play/game-play.jsx ***!
+  \*************************************/
+/*! exports provided: GamePlay */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamePlay", function() { return GamePlay; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-play.css */ "./app/game-play/game-play.css");
+/* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_play_css__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var clicker = function clicker(data) {
+  return function () {
+    return console.log(data);
+  };
+};
+
+var GamePlay = function GamePlay() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay
+  }, [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (value) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box,
+      key: value,
+      onClick: clicker(value)
+    }, " ");
+  }));
+};
+
+/***/ }),
+
+/***/ "./app/game-play/index.js":
+/*!********************************!*\
+  !*** ./app/game-play/index.js ***!
+  \********************************/
+/*! exports provided: GamePlay */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _game_play__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game-play */ "./app/game-play/game-play.jsx");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "GamePlay", function() { return _game_play__WEBPACK_IMPORTED_MODULE_0__["GamePlay"]; });
+
+
+
+/***/ }),
+
+/***/ "./app/index.jsx":
+/*!***********************!*\
+  !*** ./app/index.jsx ***!
+  \***********************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _app__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./app */ "./app/app.jsx");
+
+
+
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_app__WEBPACK_IMPORTED_MODULE_2__["App"], null), document.getElementById("root"));
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./app/app.css":
+/*!*********************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--4-1!./app/app.css ***!
+  \*********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -158,10 +511,75 @@ module.exports = content.locals || {};
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".HsH_fNErRDtGji7Jajndg {\n    color: red;\n}\n", ""]);
+exports.push([module.i, "._1SWdXM6LjApc6L-FRP5IF8 {\n    background: aquamarine;\n    width: 80%;\n    margin: auto;\n    padding: 10px;\n    display: flex;\n    justify-content: space-between;\n}\n", ""]);
 // Exports
 exports.locals = {
-	"red": "HsH_fNErRDtGji7Jajndg"
+	"container": "_1SWdXM6LjApc6L-FRP5IF8"
+};
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./app/game-panel/game-panel.css":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--4-1!./app/game-panel/game-panel.css ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n", ""]);
+// Exports
+exports.locals = {
+	"gamePanel": "_3tkOQZRVGU-C8F6iazn33X"
+};
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./app/game-panel/timer.css":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--4-1!./app/game-panel/timer.css ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, "._2t6OAyUaW6QHdncDsvkaDV {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 100px;\n    margin: 20px auto;\n    display: block;\n    text-align: center;\n}\n", ""]);
+// Exports
+exports.locals = {
+	"timer": "_2t6OAyUaW6QHdncDsvkaDV"
+};
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js?!./app/game-play/game-play.css":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ref--4-1!./app/game-play/game-play.css ***!
+  \*************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g:hover {\n    cursor: pointer;\n}\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
+// Exports
+exports.locals = {
+	"gamePlay": "_-8dCCUHoibTAPOD1SfyGk",
+	"box": "_1xWxlGV6yGj7Bx8zSukd_g",
+	"box_active": "_1X1iMl4uYPmbrLA01L_7Ev"
 };
 module.exports = exports;
 

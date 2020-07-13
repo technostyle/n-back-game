@@ -1,0 +1,10 @@
+.timer {
+    border: 1px solid pink;
+    border-radius: 30%;
+    background: aliceblue;
+    color: deeppink;
+    width: 100px;
+    margin: 20px auto;
+    display: block;
+    text-align: center;
+}

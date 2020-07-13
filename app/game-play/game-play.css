@@ -1,0 +1,21 @@
+.gamePlay {
+    flex: 60%;
+    display: grid;
+    justify-content: center;
+    grid-template-rows: 150px 150px 150px;
+    grid-template-columns: 150px 150px 150px;
+}
+
+.box {
+    background: #444;
+    border: 1px solid #555;
+    color: #AAA;
+}
+
+.box:hover {
+    cursor: pointer;
+}
+
+.box_active {
+    background: aqua;
+}
