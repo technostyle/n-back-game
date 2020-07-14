@@ -6,6 +6,7 @@ import styles from "./game-panel.css";
 import { GameResults } from "./game-results";
 
 export const GamePanel = ({
+  play,
   startGame,
   stopGame,
   gotcha,
@@ -23,10 +24,10 @@ export const GamePanel = ({
     <div className={styles.gamePanel}>
       <NBackInput onChange={setNBack} />
       <Timer time={timeLeft} />
-      <Button text="Start" onClick={start} />
-      <Button text="Stop" onClick={stopGame} />
+      <Button text="Start" onClick={start} disabled={play} />
+      <Button text="Stop" onClick={stopGame} disabled={!play} />
       <GameResults gameErrors={gameErrors} />
-      <Button text={`${nBack} back`} onClick={gotcha} />
+      <Button text={`${nBack} back`} onClick={gotcha} disabled={!play} />
     </div>
   );
 };

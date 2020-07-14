@@ -15,6 +15,7 @@
 
 .clickable {
     cursor: pointer;
+    outline: none;
 }
 
 .clickable:hover {

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
   ACTIVE_SQUARE_TIME,
+  NO_ACTIVE_SQUARE_TIME,
+  ROUND_TIME,
+  ROUNDS,
   DEFAULT_GAME_SETTINGS,
   LIGHT_SQUARE_TIME,
   MAX_N_BACK,
-  NO_ACTIVE_SQUARE_TIME,
   USER_FAILURE_TIME,
   USER_SUCCESS_TIME
 } from "common/constants";
@@ -13,9 +15,6 @@ import { GamePanel } from "./game-panel";
 import styles from "./app.css";
 import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
-const ROUNDS = 20;
-const ROUND_TIME = LIGHT_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
-// const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
 // TODO: join round timeouts and userFailureTimeout?
 const timeouts = [];
 const userFailureTimeouts = [];
@@ -23,9 +22,8 @@ const userSuccessTimeouts = [];
 let timeLeftInterval = null;
 // ---------------
 
-let time = 0;
-
 export const App = () => {
+  const [play, setPlay] = useState(false);
   const [activeCell, setActiveCell] = useState(null);
   const [prevNBack, setPrevNBack] = useState(null);
   const [gameErrors, setGameErrors] = useState(0);
@@ -45,6 +43,7 @@ export const App = () => {
 
   const resetGame = () => {
     clearAsync();
+    setPlay(false);
     setActiveCell(null);
     setPrevNBack(null);
     setUserFailure(false);
@@ -57,6 +56,7 @@ export const App = () => {
   useEffect(() => clearAsync, []);
 
   const addUserError = () => {
+    console.log("addUserError");
     setUserFailure(true);
     setGameErrors(gameErrors + 1);
     userFailureTimeouts.push(
@@ -89,6 +89,7 @@ export const App = () => {
   const startGame = gameSettings => {
     const { nBack } = gameSettings;
     resetGame();
+    setPlay(true);
     let gameTime = ROUNDS * ROUND_TIME;
     setTimeLeft(gameTime);
     timeLeftInterval = setInterval(() => {
@@ -97,6 +98,7 @@ export const App = () => {
     }, 1000);
 
     const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
+    let time = 0;
     for (let i = 0; i < ROUNDS; i++) {
       time += LIGHT_SQUARE_TIME;
       timeouts.push(
@@ -119,12 +121,13 @@ export const App = () => {
   };
 
   const onGotchaClick = () => {
-    if (prevNBack !== activeCell) {
-      addUserError();
-    } else {
-      addUserSuccess();
-      setShouldGotcha(false);
-    }
+    if (!prevNBack)
+      if (prevNBack !== activeCell) {
+        addUserError();
+      } else {
+        addUserSuccess();
+        setShouldGotcha(false);
+      }
   };
 
   const stopGame = () => resetGame();
@@ -142,6 +145,7 @@ export const App = () => {
         stopGame={stopGame}
         gotcha={onGotchaClick}
         gameErrors={gameErrors}
+        play={play}
       />
     </div>
   );
