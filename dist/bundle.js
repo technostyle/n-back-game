@@ -159,21 +159,7 @@ var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["arr
 }); // TODO: join round timeouts and userFailureTimeout?
 
 var timeouts = [];
-
-var clearTimeouts = function clearTimeouts() {
-  timeouts.forEach(clearTimeout);
-
-  while (timeouts.length) {
-    timeouts.pop();
-  }
-};
-
-var userFailureTimeout = null;
-
-var resetUserFailureTimeout = function resetUserFailureTimeout() {
-  return clearTimeout(userFailureTimeout);
-}; // ---------------
-
+var userFailureTimeouts = []; // ---------------
 
 var time = 0;
 var App = function App() {
@@ -194,20 +180,43 @@ var App = function App() {
       prevNBack = _useState6[0],
       setPrevNBack = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
       _useState8 = _slicedToArray(_useState7, 2),
-      gameResult = _useState8[0],
-      setGameResult = _useState8[1];
+      gameErrors = _useState8[0],
+      setGameErrors = _useState8[1];
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState10 = _slicedToArray(_useState9, 2),
       userFailure = _useState10[0],
       setUserFailure = _useState10[1];
 
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      shouldGotcha = _useState12[0],
+      setShouldGotcha = _useState12[1]; // TODO: resetGame()
+
+
+  var addUserError = function addUserError() {
+    setUserFailure(true);
+    setGameErrors(gameErrors + 1);
+    userFailureTimeouts.push(setTimeout(function () {
+      return setUserFailure(false);
+    }, common_constants__WEBPACK_IMPORTED_MODULE_1__["USER_FAILURE_TIME"]));
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    // activeCell is not reset to null after box highlight
+    // and user did not click to reset shouldGotcha to false
+    if (!activeCell && shouldGotcha) {
+      addUserError();
+    }
+  }, [shouldGotcha, activeCell]);
+
   var startGame = function startGame(gameSettings) {
     var nBack = gameSettings.nBack;
-    clearTimeouts();
-    resetUserFailureTimeout();
+    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(timeouts);
+    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
+    setGameErrors(0);
     console.log({
       gameSettings: gameSettings
     });
@@ -220,6 +229,7 @@ var App = function App() {
         }
 
         setActiveCell(activeBlocksSequence[i]);
+        setShouldGotcha(activeBlocksSequence[i - nBack] === activeBlocksSequence[i]);
       }, i * ROUND_TIME));
       timeouts.push(setTimeout(function () {
         setActiveCell(null);
@@ -238,13 +248,16 @@ var App = function App() {
     });
 
     if (prevNBack !== activeCell) {
-      setUserFailure(true);
-      userFailureTimeout = setTimeout(function () {
-        return setUserFailure(false);
-      }, common_constants__WEBPACK_IMPORTED_MODULE_1__["USER_FAILURE_TIME"]);
+      addUserError();
+    } else {
+      console.log({
+        shouldGotcha: shouldGotcha
+      }, "should be true");
+      setShouldGotcha(false);
     }
   };
 
+  var stopGame = console.log;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
@@ -252,7 +265,9 @@ var App = function App() {
     userFailure: userFailure
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_3__["GamePanel"], {
     startGame: startGame,
-    gotcha: onGotchaClick
+    stopGame: stopGame,
+    gotcha: onGotchaClick,
+    gameErrors: gameErrors
   }));
 };
 
@@ -288,7 +303,7 @@ var DEFAULT_GAME_SETTINGS = {
 /*!*****************************!*\
   !*** ./app/common/utils.js ***!
   \*****************************/
-/*! exports provided: arrayFromOneToN, arrayFromOtoN, randInt */
+/*! exports provided: arrayFromOneToN, arrayFromOtoN, randInt, clearTimeouts */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -296,6 +311,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayFromOneToN", function() { return arrayFromOneToN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayFromOtoN", function() { return arrayFromOtoN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randInt", function() { return randInt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearTimeouts", function() { return clearTimeouts; });
 var arrayFromOneToN = function arrayFromOneToN(n) {
   var res = [];
 
@@ -312,6 +328,13 @@ var arrayFromOtoN = function arrayFromOtoN(n) {
 };
 var randInt = function randInt(min, max) {
   return Math.round(min - 0.5 + Math.random() * (max - min + 1));
+};
+var clearTimeouts = function clearTimeouts(timeouts) {
+  timeouts.forEach(clearTimeout);
+
+  while (timeouts.length) {
+    timeouts.pop();
+  }
 };
 
 /***/ }),
@@ -362,7 +385,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer */ "./app/game-panel/timer.jsx");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var game_panel_gotcha_button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! game-panel/gotcha-button */ "./app/game-panel/gotcha-button.jsx");
+/* harmony import */ var _gotcha_button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./gotcha-button */ "./app/game-panel/gotcha-button.jsx");
+/* harmony import */ var _game_results__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./game-results */ "./app/game-panel/game-results.jsx");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -381,9 +405,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var GamePanel = function GamePanel(_ref) {
   var startGame = _ref.startGame,
-      gotcha = _ref.gotcha;
+      stopGame = _ref.stopGame,
+      gotcha = _ref.gotcha,
+      gameErrors = _ref.gameErrors;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
       _useState2 = _slicedToArray(_useState, 2),
@@ -405,9 +432,36 @@ var GamePanel = function GamePanel(_ref) {
     onClick: start
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_timer__WEBPACK_IMPORTED_MODULE_3__["Timer"], {
     time: "23.23.12"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_gotcha_button__WEBPACK_IMPORTED_MODULE_5__["GotchaButton"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_results__WEBPACK_IMPORTED_MODULE_6__["GameResults"], {
+    gameErrors: gameErrors
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_gotcha_button__WEBPACK_IMPORTED_MODULE_5__["GotchaButton"], {
     gotcha: gotcha
   }));
+};
+
+/***/ }),
+
+/***/ "./app/game-panel/game-results.jsx":
+/*!*****************************************!*\
+  !*** ./app/game-panel/game-results.jsx ***!
+  \*****************************************/
+/*! exports provided: GameResults */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameResults", function() { return GameResults; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var GameResults = function GameResults(_ref) {
+  var gameErrors = _ref.gameErrors;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer
+  }, "Errors: ".concat(gameErrors));
 };
 
 /***/ }),

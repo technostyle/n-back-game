@@ -10,7 +10,7 @@ import {
 import { GamePlay } from "./game-play";
 import { GamePanel } from "./game-panel";
 import styles from "./app.css";
-import { arrayFromOtoN, randInt } from "common/utils";
+import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
 // const interval = setInterval(setActiveCell(lightBlocksSequence.pop()), LIGHT_SQUARE_TIME)
 
@@ -19,14 +19,7 @@ const ROUND_TIME = LIGHT_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
 const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
 // TODO: join round timeouts and userFailureTimeout?
 const timeouts = [];
-const clearTimeouts = () => {
-  timeouts.forEach(clearTimeout);
-  while (timeouts.length) {
-    timeouts.pop();
-  }
-};
-let userFailureTimeout = null;
-const resetUserFailureTimeout = () => clearTimeout(userFailureTimeout);
+const userFailureTimeouts = [];
 // ---------------
 
 let time = 0;
@@ -39,13 +32,33 @@ export const App = () => {
   const [activeCell, setActiveCell] = useState(null);
   const [lightedCell, setLightedCell] = useState(null);
   const [prevNBack, setPrevNBack] = useState(null);
-  const [gameResult, setGameResult] = useState(null);
+  const [gameErrors, setGameErrors] = useState(0);
   const [userFailure, setUserFailure] = useState(false);
+  const [shouldGotcha, setShouldGotcha] = useState(false);
+
+  // TODO: resetGame()
+
+  const addUserError = () => {
+    setUserFailure(true);
+    setGameErrors(gameErrors + 1);
+    userFailureTimeouts.push(
+      setTimeout(() => setUserFailure(false), USER_FAILURE_TIME)
+    );
+  };
+
+  useEffect(() => {
+    // activeCell is not reset to null after box highlight
+    // and user did not click to reset shouldGotcha to false
+    if (!activeCell && shouldGotcha) {
+      addUserError();
+    }
+  }, [shouldGotcha, activeCell]);
 
   const startGame = gameSettings => {
     const { nBack } = gameSettings;
-    clearTimeouts();
-    resetUserFailureTimeout();
+    clearTimeouts(timeouts);
+    clearTimeouts(userFailureTimeouts);
+    setGameErrors(0);
     console.log({ gameSettings });
 
     for (let i = 0; i < ROUNDS; i++) {
@@ -56,6 +69,9 @@ export const App = () => {
             setPrevNBack(activeBlocksSequence[i - nBack]);
           }
           setActiveCell(activeBlocksSequence[i]);
+          setShouldGotcha(
+            activeBlocksSequence[i - nBack] === activeBlocksSequence[i]
+          );
         }, i * ROUND_TIME)
       );
       timeouts.push(
@@ -69,18 +85,24 @@ export const App = () => {
   const onGotchaClick = () => {
     console.log({ prevNBack, activeCell });
     if (prevNBack !== activeCell) {
-      setUserFailure(true);
-      userFailureTimeout = setTimeout(
-        () => setUserFailure(false),
-        USER_FAILURE_TIME
-      );
+      addUserError();
+    } else {
+      console.log({ shouldGotcha }, "should be true");
+      setShouldGotcha(false);
     }
   };
+
+  const stopGame = console.log;
 
   return (
     <div className={styles.container}>
       <GamePlay lightedCell={activeCell} userFailure={userFailure} />
-      <GamePanel startGame={startGame} gotcha={onGotchaClick} />
+      <GamePanel
+        startGame={startGame}
+        stopGame={stopGame}
+        gotcha={onGotchaClick}
+        gameErrors={gameErrors}
+      />
     </div>
   );
 };
