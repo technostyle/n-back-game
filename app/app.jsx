@@ -132,9 +132,13 @@ export const App = () => {
   };
 
   const onGotchaClick = () => {
+    if (!prevNBack && !activeCell) {
+      return;
+    }
+
     if (prevNBack !== activeCell) {
       addUserError();
-    } else {
+    } else if (prevNBack === activeCell) {
       addUserSuccess();
       setShouldGotcha(false);
     }
