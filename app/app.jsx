@@ -18,6 +18,15 @@ const userSuccessTimeouts = [];
 let timeLeftInterval = null;
 // ---------------
 
+const clearAsync = () => {
+  clearTimeouts(timeouts);
+  clearTimeouts(userFailureTimeouts);
+  clearTimeouts(userSuccessTimeouts);
+  if (timeLeftInterval) {
+    clearInterval(timeLeftInterval);
+  }
+};
+
 export const App = () => {
   const [play, setPlay] = useState(false);
   const [activeCell, setActiveCell] = useState(null);
@@ -27,15 +36,6 @@ export const App = () => {
   const [userSuccess, setUserSuccess] = useState(false);
   const [shouldGotcha, setShouldGotcha] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
-
-  const clearAsync = () => {
-    clearTimeouts(timeouts);
-    clearTimeouts(userFailureTimeouts);
-    clearTimeouts(userSuccessTimeouts);
-    if (timeLeftInterval) {
-      clearInterval(timeLeftInterval);
-    }
-  };
 
   const resetGame = () => {
     clearAsync();
@@ -119,7 +119,7 @@ export const App = () => {
     setPlay(true);
     setCountdown();
 
-    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(1, 2));
+    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 9));
     for (let round = 0; round < ROUNDS; round++) {
       const prevNBackToSet =
         round >= nBack ? activeBlocksSequence[round - nBack] : null;
