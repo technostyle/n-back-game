@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NBackInput } from "./n-back-input";
-import { StartButton } from "./start-button";
+import { Button } from "game-panel/button";
 import { Timer } from "./timer";
 import styles from "./game-panel.css";
 import { GotchaButton } from "./gotcha-button";
@@ -17,8 +17,9 @@ export const GamePanel = ({ startGame, stopGame, gotcha, gameErrors }) => {
   return (
     <div className={styles.gamePanel}>
       <NBackInput onChange={setNBack} />
-      <StartButton onClick={start} />
       <Timer time="23.23.12" />
+      <Button text="Start" onClick={start} />
+      <Button text="Stop" onClick={stopGame} />
       <GameResults gameErrors={gameErrors} />
       <GotchaButton gotcha={gotcha} />
     </div>

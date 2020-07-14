@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./timer.css";
 
-export const StartButton = ({ onClick }) => (
+export const Button = ({ text, onClick }) => (
   <div className={styles.timer} onClick={onClick}>
-    Start
+    {text}
   </div>
 );

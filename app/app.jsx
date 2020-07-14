@@ -30,13 +30,20 @@ export const App = () => {
   // useEffect(() => () => clearTimeouts())
 
   const [activeCell, setActiveCell] = useState(null);
-  const [lightedCell, setLightedCell] = useState(null);
   const [prevNBack, setPrevNBack] = useState(null);
   const [gameErrors, setGameErrors] = useState(0);
   const [userFailure, setUserFailure] = useState(false);
   const [shouldGotcha, setShouldGotcha] = useState(false);
 
-  // TODO: resetGame()
+  const resetGame = () => {
+    clearTimeouts(timeouts);
+    clearTimeouts(userFailureTimeouts);
+    setActiveCell(null);
+    setPrevNBack(null);
+    setUserFailure(false);
+    setShouldGotcha(false);
+    setGameErrors(0);
+  };
 
   const addUserError = () => {
     setUserFailure(true);
@@ -56,10 +63,8 @@ export const App = () => {
 
   const startGame = gameSettings => {
     const { nBack } = gameSettings;
-    clearTimeouts(timeouts);
-    clearTimeouts(userFailureTimeouts);
-    setGameErrors(0);
     console.log({ gameSettings });
+    resetGame();
 
     for (let i = 0; i < ROUNDS; i++) {
       time += LIGHT_SQUARE_TIME;
@@ -92,7 +97,7 @@ export const App = () => {
     }
   };
 
-  const stopGame = console.log;
+  const stopGame = () => resetGame();
 
   return (
     <div className={styles.container}>

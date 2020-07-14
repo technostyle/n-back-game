@@ -172,29 +172,33 @@ var App = function App() {
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      lightedCell = _useState4[0],
-      setLightedCell = _useState4[1];
+      prevNBack = _useState4[0],
+      setPrevNBack = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
       _useState6 = _slicedToArray(_useState5, 2),
-      prevNBack = _useState6[0],
-      setPrevNBack = _useState6[1];
+      gameErrors = _useState6[0],
+      setGameErrors = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState8 = _slicedToArray(_useState7, 2),
-      gameErrors = _useState8[0],
-      setGameErrors = _useState8[1];
+      userFailure = _useState8[0],
+      setUserFailure = _useState8[1];
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      userFailure = _useState10[0],
-      setUserFailure = _useState10[1];
+      shouldGotcha = _useState10[0],
+      setShouldGotcha = _useState10[1];
 
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
-      _useState12 = _slicedToArray(_useState11, 2),
-      shouldGotcha = _useState12[0],
-      setShouldGotcha = _useState12[1]; // TODO: resetGame()
-
+  var resetGame = function resetGame() {
+    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(timeouts);
+    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
+    setActiveCell(null);
+    setPrevNBack(null);
+    setUserFailure(false);
+    setShouldGotcha(false);
+    setGameErrors(0);
+  };
 
   var addUserError = function addUserError() {
     setUserFailure(true);
@@ -214,12 +218,10 @@ var App = function App() {
 
   var startGame = function startGame(gameSettings) {
     var nBack = gameSettings.nBack;
-    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(timeouts);
-    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
-    setGameErrors(0);
     console.log({
       gameSettings: gameSettings
     });
+    resetGame();
 
     var _loop = function _loop(i) {
       time += common_constants__WEBPACK_IMPORTED_MODULE_1__["LIGHT_SQUARE_TIME"];
@@ -257,7 +259,10 @@ var App = function App() {
     }
   };
 
-  var stopGame = console.log;
+  var stopGame = function stopGame() {
+    return resetGame();
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
@@ -339,6 +344,33 @@ var clearTimeouts = function clearTimeouts(timeouts) {
 
 /***/ }),
 
+/***/ "./app/game-panel/button.jsx":
+/*!***********************************!*\
+  !*** ./app/game-panel/button.jsx ***!
+  \***********************************/
+/*! exports provided: Button */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return Button; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var Button = function Button(_ref) {
+  var text = _ref.text,
+      onClick = _ref.onClick;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer,
+    onClick: onClick
+  }, text);
+};
+
+/***/ }),
+
 /***/ "./app/game-panel/game-panel.css":
 /*!***************************************!*\
   !*** ./app/game-panel/game-panel.css ***!
@@ -381,7 +413,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _n_back_input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./n-back-input */ "./app/game-panel/n-back-input.jsx");
-/* harmony import */ var _start_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./start-button */ "./app/game-panel/start-button.jsx");
+/* harmony import */ var game_panel_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! game-panel/button */ "./app/game-panel/button.jsx");
 /* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer */ "./app/game-panel/timer.jsx");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_4__);
@@ -428,10 +460,14 @@ var GamePanel = function GamePanel(_ref) {
     className: _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default.a.gamePanel
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_n_back_input__WEBPACK_IMPORTED_MODULE_1__["NBackInput"], {
     onChange: setNBack
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_start_button__WEBPACK_IMPORTED_MODULE_2__["StartButton"], {
-    onClick: start
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_timer__WEBPACK_IMPORTED_MODULE_3__["Timer"], {
     time: "23.23.12"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_button__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    text: "Start",
+    onClick: start
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_button__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    text: "Stop",
+    onClick: stopGame
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_results__WEBPACK_IMPORTED_MODULE_6__["GameResults"], {
     gameErrors: gameErrors
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_gotcha_button__WEBPACK_IMPORTED_MODULE_5__["GotchaButton"], {
@@ -570,32 +606,6 @@ var NBackInput = function NBackInput(_ref) {
     onChange: onSelect,
     value: value
   }, options)));
-};
-
-/***/ }),
-
-/***/ "./app/game-panel/start-button.jsx":
-/*!*****************************************!*\
-  !*** ./app/game-panel/start-button.jsx ***!
-  \*****************************************/
-/*! exports provided: StartButton */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StartButton", function() { return StartButton; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
-
-
-var StartButton = function StartButton(_ref) {
-  var onClick = _ref.onClick;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer,
-    onClick: onClick
-  }, "Start");
 };
 
 /***/ }),
