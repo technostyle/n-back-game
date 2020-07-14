@@ -6,7 +6,13 @@ import styles from "./game-panel.css";
 import { GotchaButton } from "./gotcha-button";
 import { GameResults } from "./game-results";
 
-export const GamePanel = ({ startGame, stopGame, gotcha, gameErrors }) => {
+export const GamePanel = ({
+  startGame,
+  stopGame,
+  gotcha,
+  gameErrors,
+  timeLeft
+}) => {
   const [nBack, setNBack] = useState(1);
 
   const start = () => {
@@ -17,7 +23,7 @@ export const GamePanel = ({ startGame, stopGame, gotcha, gameErrors }) => {
   return (
     <div className={styles.gamePanel}>
       <NBackInput onChange={setNBack} />
-      <Timer time="23.23.12" />
+      <Timer time={timeLeft} />
       <Button text="Start" onClick={start} />
       <Button text="Stop" onClick={stopGame} />
       <GameResults gameErrors={gameErrors} />

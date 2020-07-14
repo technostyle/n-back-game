@@ -20,6 +20,7 @@ const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
 // TODO: join round timeouts and userFailureTimeout?
 const timeouts = [];
 const userFailureTimeouts = [];
+let timeLeftInterval = null;
 // ---------------
 
 let time = 0;
@@ -34,15 +35,20 @@ export const App = () => {
   const [gameErrors, setGameErrors] = useState(0);
   const [userFailure, setUserFailure] = useState(false);
   const [shouldGotcha, setShouldGotcha] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(null);
 
   const resetGame = () => {
     clearTimeouts(timeouts);
     clearTimeouts(userFailureTimeouts);
+    if (timeLeftInterval) {
+      clearInterval(timeLeftInterval);
+    }
     setActiveCell(null);
     setPrevNBack(null);
     setUserFailure(false);
     setShouldGotcha(false);
     setGameErrors(0);
+    setTimeLeft(null);
   };
 
   const addUserError = () => {
@@ -61,10 +67,23 @@ export const App = () => {
     }
   }, [shouldGotcha, activeCell]);
 
+  useEffect(() => {
+    if (timeLeft && timeLeft < 1000) {
+      setTimeLeft(null);
+      clearInterval(timeLeftInterval);
+    }
+  }, [timeLeft]);
+
   const startGame = gameSettings => {
     const { nBack } = gameSettings;
     console.log({ gameSettings });
     resetGame();
+    let gameTime = ROUNDS * ROUND_TIME;
+    setTimeLeft(gameTime);
+    timeLeftInterval = setInterval(() => {
+      gameTime -= 1000;
+      setTimeLeft(gameTime);
+    }, 1000);
 
     for (let i = 0; i < ROUNDS; i++) {
       time += LIGHT_SQUARE_TIME;
@@ -103,6 +122,7 @@ export const App = () => {
     <div className={styles.container}>
       <GamePlay lightedCell={activeCell} userFailure={userFailure} />
       <GamePanel
+        timeLeft={timeLeft}
         startGame={startGame}
         stopGame={stopGame}
         gotcha={onGotchaClick}
