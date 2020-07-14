@@ -12,9 +12,10 @@
     color: #AAA;
 }
 
-.box:hover {
-    cursor: pointer;
-}
+/*.box:hover {*/
+/*    cursor: pointer;*/
+/*}*/
+
 
 .box_active {
     background: aqua;

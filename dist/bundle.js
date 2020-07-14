@@ -127,37 +127,163 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "App", function() { return App; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _game_play__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-play */ "./app/game-play/index.js");
-/* harmony import */ var _game_panel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game-panel */ "./app/game-panel/index.js");
-/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.css */ "./app/app.css");
-/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_app_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var common_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! common/constants */ "./app/common/constants.js");
+/* harmony import */ var _game_play__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game-play */ "./app/game-play/index.js");
+/* harmony import */ var _game_panel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game-panel */ "./app/game-panel/index.js");
+/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.css */ "./app/app.css");
+/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_app_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var common_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! common/utils */ "./app/common/utils.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
 
+
+
+ // const interval = setInterval(setActiveCell(lightBlocksSequence.pop()), LIGHT_SQUARE_TIME)
+
+var ROUNDS = 20;
+var ROUND_TIME = common_constants__WEBPACK_IMPORTED_MODULE_1__["LIGHT_SQUARE_TIME"] + common_constants__WEBPACK_IMPORTED_MODULE_1__["NO_ACTIVE_SQUARE_TIME"];
+var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["arrayFromOtoN"])(ROUNDS).map(function () {
+  return Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["randInt"])(0, 8);
+});
+var timeouts = [];
+
+var clearTimeouts = function clearTimeouts() {
+  timeouts.forEach(clearTimeout);
+
+  while (timeouts.length) {
+    timeouts.pop();
+  }
+};
+
+var time = 0;
 var App = function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _app_css__WEBPACK_IMPORTED_MODULE_3___default.a.container
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_1__["GamePlay"], {
-    gameSettings: {
-      nBack: 1
+  // const [gameSettings, setGameSettings] = useState(DEFAULT_GAME_SETTINGS);
+  // useEffect(() => () => clearTimeouts())
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      activeCell = _useState2[0],
+      setActiveCell = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      lightedCell = _useState4[0],
+      setLightedCell = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      prevNBack = _useState6[0],
+      setPrevNBack = _useState6[1];
+
+  var startGame = function startGame(gameSettings) {
+    var nBack = gameSettings.nBack;
+    clearTimeouts();
+    console.log({
+      gameSettings: gameSettings
+    });
+
+    var _loop = function _loop(i) {
+      time += common_constants__WEBPACK_IMPORTED_MODULE_1__["LIGHT_SQUARE_TIME"];
+      timeouts.push(setTimeout(function () {
+        if (i >= nBack) {
+          setPrevNBack(activeBlocksSequence[i - nBack]);
+        }
+
+        setActiveCell(activeBlocksSequence[i]);
+      }, i * ROUND_TIME));
+      timeouts.push(setTimeout(function () {
+        setActiveCell(null);
+      }, i * ROUND_TIME + common_constants__WEBPACK_IMPORTED_MODULE_1__["ACTIVE_SQUARE_TIME"]));
+    };
+
+    for (var i = 0; i < ROUNDS; i++) {
+      _loop(i);
     }
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_2__["GamePanel"], null));
+  };
+
+  var onGotchaClick = function onGotchaClick() {
+    return console.log({
+      prevNBack: prevNBack,
+      activeCell: activeCell
+    });
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
+    lightedCell: activeCell
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_3__["GamePanel"], {
+    startGame: startGame,
+    gotcha: onGotchaClick
+  }));
 };
 
 /***/ }),
 
-/***/ "./app/game-panel/constants.js":
-/*!*************************************!*\
-  !*** ./app/game-panel/constants.js ***!
-  \*************************************/
-/*! exports provided: MAX_N_BACK */
+/***/ "./app/common/constants.js":
+/*!*********************************!*\
+  !*** ./app/common/constants.js ***!
+  \*********************************/
+/*! exports provided: MAX_N_BACK, ACTIVE_SQUARE_TIME, LIGHT_SQUARE_TIME, NO_ACTIVE_SQUARE_TIME, DEFAULT_GAME_SETTINGS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_N_BACK", function() { return MAX_N_BACK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTIVE_SQUARE_TIME", function() { return ACTIVE_SQUARE_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LIGHT_SQUARE_TIME", function() { return LIGHT_SQUARE_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NO_ACTIVE_SQUARE_TIME", function() { return NO_ACTIVE_SQUARE_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_GAME_SETTINGS", function() { return DEFAULT_GAME_SETTINGS; });
 var MAX_N_BACK = 10;
+var ACTIVE_SQUARE_TIME = 1000;
+var LIGHT_SQUARE_TIME = ACTIVE_SQUARE_TIME;
+var NO_ACTIVE_SQUARE_TIME = 300;
+var DEFAULT_GAME_SETTINGS = {
+  nBack: 1
+};
+
+/***/ }),
+
+/***/ "./app/common/utils.js":
+/*!*****************************!*\
+  !*** ./app/common/utils.js ***!
+  \*****************************/
+/*! exports provided: arrayFromOneToN, arrayFromOtoN, randInt */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayFromOneToN", function() { return arrayFromOneToN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayFromOtoN", function() { return arrayFromOtoN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randInt", function() { return randInt; });
+var arrayFromOneToN = function arrayFromOneToN(n) {
+  var res = [];
+
+  for (var i = 1; i <= n; i++) {
+    res.push(i);
+  }
+
+  return res;
+};
+var arrayFromOtoN = function arrayFromOtoN(n) {
+  return Array.apply(null, {
+    length: n
+  }).map(Number.call, Number);
+};
+var randInt = function randInt(min, max) {
+  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
+};
 
 /***/ }),
 
@@ -207,23 +333,78 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer */ "./app/game-panel/timer.jsx");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var game_panel_gotcha_button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! game-panel/gotcha-button */ "./app/game-panel/gotcha-button.jsx");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
 
 
-var GamePanel = function GamePanel() {
+
+
+var GamePanel = function GamePanel(_ref) {
+  var startGame = _ref.startGame,
+      gotcha = _ref.gotcha;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
+      _useState2 = _slicedToArray(_useState, 2),
+      nBack = _useState2[0],
+      setNBack = _useState2[1];
+
+  var start = function start() {
+    var settings = {
+      nBack: nBack
+    };
+    startGame(settings);
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default.a.gamePanel
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_n_back_input__WEBPACK_IMPORTED_MODULE_1__["NBackInput"], {
-    onChange: console.log
+    onChange: setNBack
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_start_button__WEBPACK_IMPORTED_MODULE_2__["StartButton"], {
-    onClick: function onClick() {
-      return console.log("start");
-    }
+    onClick: start
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_timer__WEBPACK_IMPORTED_MODULE_3__["Timer"], {
     time: "23.23.12"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_gotcha_button__WEBPACK_IMPORTED_MODULE_5__["GotchaButton"], {
+    gotcha: gotcha
   }));
+};
+
+/***/ }),
+
+/***/ "./app/game-panel/gotcha-button.jsx":
+/*!******************************************!*\
+  !*** ./app/game-panel/gotcha-button.jsx ***!
+  \******************************************/
+/*! exports provided: GotchaButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GotchaButton", function() { return GotchaButton; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var GotchaButton = function GotchaButton(_ref) {
+  var gotcha = _ref.gotcha;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer,
+    onClick: gotcha
+  }, "Nback");
 };
 
 /***/ }),
@@ -256,9 +437,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NBackInput", function() { return NBackInput; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./app/game-panel/constants.js");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var common_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! common/utils */ "./app/common/utils.js");
+/* harmony import */ var common_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! common/constants */ "./app/common/constants.js");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
+/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_3__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -275,17 +457,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var arrayFromOneToN = function arrayFromOneToN(n) {
-  var res = [];
-
-  for (var i = 1; i <= n; i++) {
-    res.push(i);
-  }
-
-  return res;
-};
-
-var fromOneToN = arrayFromOneToN(_constants__WEBPACK_IMPORTED_MODULE_1__["MAX_N_BACK"]);
 var NBackInput = function NBackInput(_ref) {
   var onChange = _ref.onChange;
 
@@ -296,18 +467,21 @@ var NBackInput = function NBackInput(_ref) {
 
   var onSelect = function onSelect(event) {
     var newValue = event.target.value;
-    if (value !== newValue) setValue(newValue);
-    onChange(newValue);
+
+    if (value !== newValue) {
+      setValue(newValue);
+      onChange(newValue);
+    }
   };
 
-  var options = fromOneToN.map(function (nBack) {
+  var options = Object(common_utils__WEBPACK_IMPORTED_MODULE_1__["arrayFromOneToN"])(common_constants__WEBPACK_IMPORTED_MODULE_2__["MAX_N_BACK"]).map(function (nBack) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
       value: nBack,
       key: nBack
     }, nBack);
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_2___default.a.timer
+    className: _timer_css__WEBPACK_IMPORTED_MODULE_3___default.a.timer
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "n-back:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     name: "n-backs",
     onChange: onSelect,
@@ -389,7 +563,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var Timer = function Timer(_ref) {
-  var time = _ref.time;
+  var time = _ref.time,
+      play = _ref.play,
+      stop = _ref.stop;
+  // const [time, setTime] = useState(startTime);
+  // const interval = setInterval(setTime(time - 1), 1000);
+  // useEffect(() => {
+  //
+  // }, time)
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer
   }, time);
@@ -442,22 +623,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_play_css__WEBPACK_IMPORTED_MODULE_1__);
 
 
-
-var clicker = function clicker(data) {
-  return function () {
-    return console.log(data);
-  };
-};
-
-var GamePlay = function GamePlay() {
+var GamePlay = function GamePlay(_ref) {
+  var lightedCell = _ref.lightedCell;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay
   }, [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (value) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box,
-      key: value,
-      onClick: clicker(value)
-    }, " ");
+      className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " ").concat(lightedCell === value ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : ""),
+      key: value
+    });
   }));
 };
 
@@ -574,7 +748,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g:hover {\n    cursor: pointer;\n}\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
+exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n/*.box:hover {*/\n/*    cursor: pointer;*/\n/*}*/\n\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"gamePlay": "_-8dCCUHoibTAPOD1SfyGk",
