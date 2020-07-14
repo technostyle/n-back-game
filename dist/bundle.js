@@ -150,62 +150,94 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
- // const interval = setInterval(setActiveCell(lightBlocksSequence.pop()), LIGHT_SQUARE_TIME)
-
-var ROUNDS = 20;
-var ROUND_TIME = common_constants__WEBPACK_IMPORTED_MODULE_1__["LIGHT_SQUARE_TIME"] + common_constants__WEBPACK_IMPORTED_MODULE_1__["NO_ACTIVE_SQUARE_TIME"];
-var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["arrayFromOtoN"])(ROUNDS).map(function () {
-  return Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["randInt"])(0, 8);
-}); // TODO: join round timeouts and userFailureTimeout?
+ // TODO: join round timeouts and userFailureTimeout?
 
 var timeouts = [];
-var userFailureTimeouts = []; // ---------------
+var userFailureTimeouts = [];
+var userSuccessTimeouts = [];
+var timeLeftInterval = null; // ---------------
 
-var time = 0;
+var clearAsync = function clearAsync() {
+  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(timeouts);
+  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
+  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userSuccessTimeouts);
+
+  if (timeLeftInterval) {
+    clearInterval(timeLeftInterval);
+  }
+};
+
 var App = function App() {
-  // const [gameSettings, setGameSettings] = useState(DEFAULT_GAME_SETTINGS);
-  // useEffect(() => () => clearTimeouts())
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState2 = _slicedToArray(_useState, 2),
-      activeCell = _useState2[0],
-      setActiveCell = _useState2[1];
+      play = _useState2[0],
+      setPlay = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      prevNBack = _useState4[0],
-      setPrevNBack = _useState4[1];
+      activeCell = _useState4[0],
+      setActiveCell = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState6 = _slicedToArray(_useState5, 2),
-      gameErrors = _useState6[0],
-      setGameErrors = _useState6[1];
+      prevNBack = _useState6[0],
+      setPrevNBack = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(0),
       _useState8 = _slicedToArray(_useState7, 2),
-      userFailure = _useState8[0],
-      setUserFailure = _useState8[1];
+      gameErrors = _useState8[0],
+      setGameErrors = _useState8[1];
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      shouldGotcha = _useState10[0],
-      setShouldGotcha = _useState10[1];
+      userFailure = _useState10[0],
+      setUserFailure = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      userSuccess = _useState12[0],
+      setUserSuccess = _useState12[1];
+
+  var _useState13 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      shouldGotcha = _useState14[0],
+      setShouldGotcha = _useState14[1];
+
+  var _useState15 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      timeLeft = _useState16[0],
+      setTimeLeft = _useState16[1];
 
   var resetGame = function resetGame() {
-    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(timeouts);
-    Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
+    clearAsync();
+    setPlay(false);
     setActiveCell(null);
     setPrevNBack(null);
     setUserFailure(false);
+    setUserSuccess(false);
     setShouldGotcha(false);
     setGameErrors(0);
+    setTimeLeft(null);
   };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    return clearAsync;
+  }, []);
 
   var addUserError = function addUserError() {
     setUserFailure(true);
     setGameErrors(gameErrors + 1);
+    setShouldGotcha(false);
     userFailureTimeouts.push(setTimeout(function () {
       return setUserFailure(false);
     }, common_constants__WEBPACK_IMPORTED_MODULE_1__["USER_FAILURE_TIME"]));
+  };
+
+  var addUserSuccess = function addUserSuccess() {
+    setUserSuccess(true);
+    userSuccessTimeouts.push(setTimeout(function () {
+      return setUserSuccess(false);
+    }, common_constants__WEBPACK_IMPORTED_MODULE_1__["USER_SUCCESS_TIME"]));
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
@@ -215,46 +247,66 @@ var App = function App() {
       addUserError();
     }
   }, [shouldGotcha, activeCell]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (timeLeft && timeLeft < 1000) {
+      setTimeLeft(null);
+      clearInterval(timeLeftInterval);
+    }
+  }, [timeLeft]);
+
+  var setCountdown = function setCountdown() {
+    var gameTime = common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"] * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"];
+    setTimeLeft(gameTime);
+    timeLeftInterval = setInterval(function () {
+      gameTime -= 1000;
+      setTimeLeft(gameTime);
+    }, 1000);
+  };
+
+  var setRoundStart = function setRoundStart(round, prevCell, curCell) {
+    timeouts.push(setTimeout(function () {
+      setPrevNBack(prevCell);
+      setActiveCell(curCell);
+      setShouldGotcha(prevCell === curCell);
+    }, round * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"]));
+  };
+
+  var setRoundFinish = function setRoundFinish(round) {
+    timeouts.push(setTimeout(function () {
+      setActiveCell(null);
+    }, round * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"] + common_constants__WEBPACK_IMPORTED_MODULE_1__["ACTIVE_SQUARE_TIME"]));
+  };
+
+  var setGameStop = function setGameStop() {
+    timeouts.push(setTimeout(function () {
+      return setPlay(false);
+    }, common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"] * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"]));
+  };
 
   var startGame = function startGame(gameSettings) {
     var nBack = gameSettings.nBack;
-    console.log({
-      gameSettings: gameSettings
-    });
     resetGame();
+    setPlay(true);
+    setCountdown();
+    var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["arrayFromOtoN"])(common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"]).map(function () {
+      return Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["randInt"])(1, 9);
+    });
 
-    var _loop = function _loop(i) {
-      time += common_constants__WEBPACK_IMPORTED_MODULE_1__["LIGHT_SQUARE_TIME"];
-      timeouts.push(setTimeout(function () {
-        if (i >= nBack) {
-          setPrevNBack(activeBlocksSequence[i - nBack]);
-        }
-
-        setActiveCell(activeBlocksSequence[i]);
-        setShouldGotcha(activeBlocksSequence[i - nBack] === activeBlocksSequence[i]);
-      }, i * ROUND_TIME));
-      timeouts.push(setTimeout(function () {
-        setActiveCell(null);
-      }, i * ROUND_TIME + common_constants__WEBPACK_IMPORTED_MODULE_1__["ACTIVE_SQUARE_TIME"]));
-    };
-
-    for (var i = 0; i < ROUNDS; i++) {
-      _loop(i);
+    for (var round = 0; round < common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"]; round++) {
+      var prevNBackToSet = round >= nBack ? activeBlocksSequence[round - nBack] : null;
+      var activeCellToSet = activeBlocksSequence[round];
+      setRoundStart(round, prevNBackToSet, activeCellToSet);
+      setRoundFinish(round);
     }
+
+    setGameStop();
   };
 
   var onGotchaClick = function onGotchaClick() {
-    console.log({
-      prevNBack: prevNBack,
-      activeCell: activeCell
-    });
-
     if (prevNBack !== activeCell) {
       addUserError();
     } else {
-      console.log({
-        shouldGotcha: shouldGotcha
-      }, "should be true");
+      addUserSuccess();
       setShouldGotcha(false);
     }
   };
@@ -267,12 +319,15 @@ var App = function App() {
     className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
     lightedCell: activeCell,
-    userFailure: userFailure
+    userFailure: userFailure,
+    userSuccess: userSuccess
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_3__["GamePanel"], {
+    timeLeft: timeLeft,
     startGame: startGame,
     stopGame: stopGame,
     gotcha: onGotchaClick,
-    gameErrors: gameErrors
+    gameErrors: gameErrors,
+    play: play
   }));
 };
 
@@ -282,25 +337,25 @@ var App = function App() {
 /*!*********************************!*\
   !*** ./app/common/constants.js ***!
   \*********************************/
-/*! exports provided: MAX_N_BACK, ACTIVE_SQUARE_TIME, LIGHT_SQUARE_TIME, NO_ACTIVE_SQUARE_TIME, USER_FAILURE_TIME, DEFAULT_GAME_SETTINGS */
+/*! exports provided: MAX_N_BACK, ACTIVE_SQUARE_TIME, NO_ACTIVE_SQUARE_TIME, ROUND_TIME, USER_FAILURE_TIME, USER_SUCCESS_TIME, ROUNDS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MAX_N_BACK", function() { return MAX_N_BACK; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTIVE_SQUARE_TIME", function() { return ACTIVE_SQUARE_TIME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LIGHT_SQUARE_TIME", function() { return LIGHT_SQUARE_TIME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NO_ACTIVE_SQUARE_TIME", function() { return NO_ACTIVE_SQUARE_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROUND_TIME", function() { return ROUND_TIME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "USER_FAILURE_TIME", function() { return USER_FAILURE_TIME; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_GAME_SETTINGS", function() { return DEFAULT_GAME_SETTINGS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "USER_SUCCESS_TIME", function() { return USER_SUCCESS_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ROUNDS", function() { return ROUNDS; });
 var MAX_N_BACK = 10;
 var ACTIVE_SQUARE_TIME = 1000;
-var LIGHT_SQUARE_TIME = ACTIVE_SQUARE_TIME;
 var NO_ACTIVE_SQUARE_TIME = 300;
+var ROUND_TIME = ACTIVE_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
 var USER_FAILURE_TIME = 200;
-var DEFAULT_GAME_SETTINGS = {
-  nBack: 1
-};
+var USER_SUCCESS_TIME = USER_FAILURE_TIME;
+var ROUNDS = 20;
 
 /***/ }),
 
@@ -332,7 +387,7 @@ var arrayFromOtoN = function arrayFromOtoN(n) {
   }).map(Number.call, Number);
 };
 var randInt = function randInt(min, max) {
-  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
+  return +Math.round(min - 0.5 + Math.random() * (max - min + 1));
 };
 var clearTimeouts = function clearTimeouts(timeouts) {
   timeouts.forEach(clearTimeout);
@@ -356,16 +411,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return Button; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_1__);
 
 
 var Button = function Button(_ref) {
   var text = _ref.text,
-      onClick = _ref.onClick;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer,
-    onClick: onClick
+      onClick = _ref.onClick,
+      disabled = _ref.disabled;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(disabled ? "" : _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.clickable),
+    onClick: onClick,
+    disabled: disabled
   }, text);
 };
 
@@ -417,8 +474,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _timer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer */ "./app/game-panel/timer.jsx");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
 /* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _gotcha_button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./gotcha-button */ "./app/game-panel/gotcha-button.jsx");
-/* harmony import */ var _game_results__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./game-results */ "./app/game-panel/game-results.jsx");
+/* harmony import */ var _game_results__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./game-results */ "./app/game-panel/game-results.jsx");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -437,12 +493,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var GamePanel = function GamePanel(_ref) {
-  var startGame = _ref.startGame,
+  var play = _ref.play,
+      startGame = _ref.startGame,
       stopGame = _ref.stopGame,
       gotcha = _ref.gotcha,
-      gameErrors = _ref.gameErrors;
+      gameErrors = _ref.gameErrors,
+      timeLeft = _ref.timeLeft;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
       _useState2 = _slicedToArray(_useState, 2),
@@ -459,19 +516,24 @@ var GamePanel = function GamePanel(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _game_panel_css__WEBPACK_IMPORTED_MODULE_4___default.a.gamePanel
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_n_back_input__WEBPACK_IMPORTED_MODULE_1__["NBackInput"], {
-    onChange: setNBack
+    onChange: setNBack,
+    disabled: play
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_timer__WEBPACK_IMPORTED_MODULE_3__["Timer"], {
-    time: "23.23.12"
+    time: timeLeft
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_button__WEBPACK_IMPORTED_MODULE_2__["Button"], {
     text: "Start",
-    onClick: start
+    onClick: start,
+    disabled: play
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_button__WEBPACK_IMPORTED_MODULE_2__["Button"], {
     text: "Stop",
-    onClick: stopGame
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_results__WEBPACK_IMPORTED_MODULE_6__["GameResults"], {
+    onClick: stopGame,
+    disabled: !play
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_results__WEBPACK_IMPORTED_MODULE_5__["GameResults"], {
     gameErrors: gameErrors
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_gotcha_button__WEBPACK_IMPORTED_MODULE_5__["GotchaButton"], {
-    gotcha: gotcha
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_button__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    text: "".concat(nBack, " back"),
+    onClick: gotcha,
+    disabled: !play
   }));
 };
 
@@ -489,41 +551,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameResults", function() { return GameResults; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_1__);
 
 
 var GameResults = function GameResults(_ref) {
   var gameErrors = _ref.gameErrors;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer
+    className: _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item
   }, "Errors: ".concat(gameErrors));
-};
-
-/***/ }),
-
-/***/ "./app/game-panel/gotcha-button.jsx":
-/*!******************************************!*\
-  !*** ./app/game-panel/gotcha-button.jsx ***!
-  \******************************************/
-/*! exports provided: GotchaButton */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GotchaButton", function() { return GotchaButton; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
-
-
-var GotchaButton = function GotchaButton(_ref) {
-  var gotcha = _ref.gotcha;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer,
-    onClick: gotcha
-  }, "Nback");
 };
 
 /***/ }),
@@ -558,8 +594,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var common_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! common/utils */ "./app/common/utils.js");
 /* harmony import */ var common_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! common/constants */ "./app/common/constants.js");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_3__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -577,7 +613,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var NBackInput = function NBackInput(_ref) {
-  var onChange = _ref.onChange;
+  var onChange = _ref.onChange,
+      disabled = _ref.disabled;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(1),
       _useState2 = _slicedToArray(_useState, 2),
@@ -600,42 +637,14 @@ var NBackInput = function NBackInput(_ref) {
     }, nBack);
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_3___default.a.timer
+    className: _game_panel_css__WEBPACK_IMPORTED_MODULE_3___default.a.gamePanel__item
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "n-back:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     name: "n-backs",
     onChange: onSelect,
-    value: value
+    value: value,
+    disabled: disabled
   }, options)));
 };
-
-/***/ }),
-
-/***/ "./app/game-panel/timer.css":
-/*!**********************************!*\
-  !*** ./app/game-panel/timer.css ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var api = __webpack_require__(/*! ../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-            var content = __webpack_require__(/*! !../../node_modules/css-loader/dist/cjs.js??ref--4-1!./timer.css */ "./node_modules/css-loader/dist/cjs.js?!./app/game-panel/timer.css");
-
-            content = content.__esModule ? content.default : content;
-
-            if (typeof content === 'string') {
-              content = [[module.i, content, '']];
-            }
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = api(content, options);
-
-
-
-module.exports = content.locals || {};
 
 /***/ }),
 
@@ -651,22 +660,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Timer", function() { return Timer; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.css */ "./app/game-panel/timer.css");
-/* harmony import */ var _timer_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_timer_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-panel.css */ "./app/game-panel/game-panel.css");
+/* harmony import */ var _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_panel_css__WEBPACK_IMPORTED_MODULE_1__);
 
+
+
+var displayTwoDigits = function displayTwoDigits(integer) {
+  return integer > 9 ? integer : "0".concat(integer);
+};
 
 var Timer = function Timer(_ref) {
-  var time = _ref.time,
-      play = _ref.play,
-      stop = _ref.stop;
-  // const [time, setTime] = useState(startTime);
-  // const interval = setInterval(setTime(time - 1), 1000);
-  // useEffect(() => {
-  //
-  // }, time)
+  var time = _ref.time;
+
+  if (!time) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item
+    }, "Click Start");
+  }
+
+  var totalSeconds = Math.floor(time / 1000);
+  var minutes = Math.floor(totalSeconds / 60);
+  var seconds = Math.floor(totalSeconds) % 60;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _timer_css__WEBPACK_IMPORTED_MODULE_1___default.a.timer
-  }, time);
+    className: _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item
+  }, "".concat(displayTwoDigits(minutes), " : ").concat(displayTwoDigits(seconds)));
 };
 
 /***/ }),
@@ -718,12 +735,13 @@ __webpack_require__.r(__webpack_exports__);
 
 var GamePlay = function GamePlay(_ref) {
   var lightedCell = _ref.lightedCell,
-      userFailure = _ref.userFailure;
+      userFailure = _ref.userFailure,
+      userSuccess = _ref.userSuccess;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay, " ").concat(userFailure ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_failure : "")
-  }, [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (value) {
+    className: "\n        ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay, " \n        ").concat(userFailure ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_failure : "", "\n        ").concat(userSuccess ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_success : "", "\n      ")
+  }, [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (value) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "\n          ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " \n          ").concat(lightedCell === value ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : "", "\n          "),
+      className: "\n            ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " \n            ").concat(lightedCell === value ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : "", "\n          "),
       key: value
     });
   }));
@@ -800,31 +818,12 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n", ""]);
+exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n\n._2OeanlVVSFwshDl29TQF5R {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 100px;\n    margin: 20px auto;\n    display: block;\n    text-align: center;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ {\n    cursor: pointer;\n    outline: none;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ:hover {\n    cursor: pointer;\n    opacity: 0.7;\n}\n", ""]);
 // Exports
 exports.locals = {
-	"gamePanel": "_3tkOQZRVGU-C8F6iazn33X"
-};
-module.exports = exports;
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/dist/cjs.js?!./app/game-panel/timer.css":
-/*!**********************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ref--4-1!./app/game-panel/timer.css ***!
-  \**********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
-exports.push([module.i, "._2t6OAyUaW6QHdncDsvkaDV {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 100px;\n    margin: 20px auto;\n    display: block;\n    text-align: center;\n}\n", ""]);
-// Exports
-exports.locals = {
-	"timer": "_2t6OAyUaW6QHdncDsvkaDV"
+	"gamePanel": "_3tkOQZRVGU-C8F6iazn33X",
+	"gamePanel__item": "_2OeanlVVSFwshDl29TQF5R",
+	"clickable": "_25pt3oXib7mvkuSCl6PrNZ"
 };
 module.exports = exports;
 
@@ -842,11 +841,12 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n.q6VXoxHriUw8F3YPD-_eI {\n    background: red;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
+exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n.q6VXoxHriUw8F3YPD-_eI {\n    background: red;\n}\n\n._3kut1ZcvlMrZQo5atLjCN8 {\n    background: limegreen;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"gamePlay": "_-8dCCUHoibTAPOD1SfyGk",
 	"gamePlay_failure": "q6VXoxHriUw8F3YPD-_eI",
+	"gamePlay_success": "_3kut1ZcvlMrZQo5atLjCN8",
 	"box": "_1xWxlGV6yGj7Bx8zSukd_g",
 	"box_active": "_1X1iMl4uYPmbrLA01L_7Ev"
 };
