@@ -3,7 +3,6 @@ import { NBackInput } from "./n-back-input";
 import { Button } from "game-panel/button";
 import { Timer } from "./timer";
 import styles from "./game-panel.css";
-import { GotchaButton } from "./gotcha-button";
 import { GameResults } from "./game-results";
 
 export const GamePanel = ({
@@ -27,7 +26,7 @@ export const GamePanel = ({
       <Button text="Start" onClick={start} />
       <Button text="Stop" onClick={stopGame} />
       <GameResults gameErrors={gameErrors} />
-      <GotchaButton gotcha={gotcha} />
+      <Button text={`${nBack} back`} onClick={gotcha} />
     </div>
   );
 };

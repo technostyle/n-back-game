@@ -76,7 +76,6 @@ export const App = () => {
 
   const startGame = gameSettings => {
     const { nBack } = gameSettings;
-    console.log({ gameSettings });
     resetGame();
     let gameTime = ROUNDS * ROUND_TIME;
     setTimeLeft(gameTime);
@@ -107,11 +106,9 @@ export const App = () => {
   };
 
   const onGotchaClick = () => {
-    console.log({ prevNBack, activeCell });
     if (prevNBack !== activeCell) {
       addUserError();
     } else {
-      console.log({ shouldGotcha }, "should be true");
       setShouldGotcha(false);
     }
   };

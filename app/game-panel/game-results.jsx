@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "./timer.css";
+import styles from "./game-panel.css";
 
 export const GameResults = ({ gameErrors }) => (
-  <div className={styles.timer}>{`Errors: ${gameErrors}`}</div>
+  <div className={styles.gamePanel__item}>{`Errors: ${gameErrors}`}</div>
 );

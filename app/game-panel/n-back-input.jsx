@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { arrayFromOneToN } from "common/utils";
 import { MAX_N_BACK } from "common/constants";
-import styles from "./timer.css";
+import styles from "./game-panel.css";
 
 export const NBackInput = ({ onChange }) => {
   const [value, setValue] = useState(1);
@@ -20,7 +20,7 @@ export const NBackInput = ({ onChange }) => {
     </option>
   ));
   return (
-    <div className={styles.timer}>
+    <div className={styles.gamePanel__item}>
       <label>
         n-back:
         <select name="n-backs" onChange={onSelect} value={value}>
