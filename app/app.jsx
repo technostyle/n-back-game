@@ -12,8 +12,6 @@ import { GamePanel } from "./game-panel";
 import styles from "./app.css";
 import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
-// const interval = setInterval(setActiveCell(lightBlocksSequence.pop()), LIGHT_SQUARE_TIME)
-
 const ROUNDS = 20;
 const ROUND_TIME = LIGHT_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
 const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
@@ -26,10 +24,6 @@ let timeLeftInterval = null;
 let time = 0;
 
 export const App = () => {
-  // const [gameSettings, setGameSettings] = useState(DEFAULT_GAME_SETTINGS);
-
-  // useEffect(() => () => clearTimeouts())
-
   const [activeCell, setActiveCell] = useState(null);
   const [prevNBack, setPrevNBack] = useState(null);
   const [gameErrors, setGameErrors] = useState(0);
@@ -37,12 +31,16 @@ export const App = () => {
   const [shouldGotcha, setShouldGotcha] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
 
-  const resetGame = () => {
+  const clearAsync = () => {
     clearTimeouts(timeouts);
     clearTimeouts(userFailureTimeouts);
     if (timeLeftInterval) {
       clearInterval(timeLeftInterval);
     }
+  };
+
+  const resetGame = () => {
+    clearAsync();
     setActiveCell(null);
     setPrevNBack(null);
     setUserFailure(false);
@@ -50,6 +48,8 @@ export const App = () => {
     setGameErrors(0);
     setTimeLeft(null);
   };
+
+  useEffect(() => clearAsync, []);
 
   const addUserError = () => {
     setUserFailure(true);
