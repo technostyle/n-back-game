@@ -4,7 +4,8 @@ import {
   DEFAULT_GAME_SETTINGS,
   LIGHT_SQUARE_TIME,
   MAX_N_BACK,
-  NO_ACTIVE_SQUARE_TIME
+  NO_ACTIVE_SQUARE_TIME,
+  USER_FAILURE_TIME
 } from "common/constants";
 import { GamePlay } from "./game-play";
 import { GamePanel } from "./game-panel";
@@ -16,6 +17,7 @@ import { arrayFromOtoN, randInt } from "common/utils";
 const ROUNDS = 20;
 const ROUND_TIME = LIGHT_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
 const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
+// TODO: join round timeouts and userFailureTimeout?
 const timeouts = [];
 const clearTimeouts = () => {
   timeouts.forEach(clearTimeout);
@@ -23,6 +25,9 @@ const clearTimeouts = () => {
     timeouts.pop();
   }
 };
+let userFailureTimeout = null;
+const resetUserFailureTimeout = () => clearTimeout(userFailureTimeout);
+// ---------------
 
 let time = 0;
 
@@ -30,12 +35,17 @@ export const App = () => {
   // const [gameSettings, setGameSettings] = useState(DEFAULT_GAME_SETTINGS);
 
   // useEffect(() => () => clearTimeouts())
+
   const [activeCell, setActiveCell] = useState(null);
   const [lightedCell, setLightedCell] = useState(null);
   const [prevNBack, setPrevNBack] = useState(null);
+  const [gameResult, setGameResult] = useState(null);
+  const [userFailure, setUserFailure] = useState(false);
+
   const startGame = gameSettings => {
     const { nBack } = gameSettings;
     clearTimeouts();
+    resetUserFailureTimeout();
     console.log({ gameSettings });
 
     for (let i = 0; i < ROUNDS; i++) {
@@ -56,11 +66,20 @@ export const App = () => {
     }
   };
 
-  const onGotchaClick = () => console.log({ prevNBack, activeCell });
+  const onGotchaClick = () => {
+    console.log({ prevNBack, activeCell });
+    if (prevNBack !== activeCell) {
+      setUserFailure(true);
+      userFailureTimeout = setTimeout(
+        () => setUserFailure(false),
+        USER_FAILURE_TIME
+      );
+    }
+  };
 
   return (
     <div className={styles.container}>
-      <GamePlay lightedCell={activeCell} />
+      <GamePlay lightedCell={activeCell} userFailure={userFailure} />
       <GamePanel startGame={startGame} gotcha={onGotchaClick} />
     </div>
   );

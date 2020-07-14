@@ -156,7 +156,8 @@ var ROUNDS = 20;
 var ROUND_TIME = common_constants__WEBPACK_IMPORTED_MODULE_1__["LIGHT_SQUARE_TIME"] + common_constants__WEBPACK_IMPORTED_MODULE_1__["NO_ACTIVE_SQUARE_TIME"];
 var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["arrayFromOtoN"])(ROUNDS).map(function () {
   return Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["randInt"])(0, 8);
-});
+}); // TODO: join round timeouts and userFailureTimeout?
+
 var timeouts = [];
 
 var clearTimeouts = function clearTimeouts() {
@@ -166,6 +167,13 @@ var clearTimeouts = function clearTimeouts() {
     timeouts.pop();
   }
 };
+
+var userFailureTimeout = null;
+
+var resetUserFailureTimeout = function resetUserFailureTimeout() {
+  return clearTimeout(userFailureTimeout);
+}; // ---------------
+
 
 var time = 0;
 var App = function App() {
@@ -186,9 +194,20 @@ var App = function App() {
       prevNBack = _useState6[0],
       setPrevNBack = _useState6[1];
 
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      gameResult = _useState8[0],
+      setGameResult = _useState8[1];
+
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      userFailure = _useState10[0],
+      setUserFailure = _useState10[1];
+
   var startGame = function startGame(gameSettings) {
     var nBack = gameSettings.nBack;
     clearTimeouts();
+    resetUserFailureTimeout();
     console.log({
       gameSettings: gameSettings
     });
@@ -213,16 +232,24 @@ var App = function App() {
   };
 
   var onGotchaClick = function onGotchaClick() {
-    return console.log({
+    console.log({
       prevNBack: prevNBack,
       activeCell: activeCell
     });
+
+    if (prevNBack !== activeCell) {
+      setUserFailure(true);
+      userFailureTimeout = setTimeout(function () {
+        return setUserFailure(false);
+      }, common_constants__WEBPACK_IMPORTED_MODULE_1__["USER_FAILURE_TIME"]);
+    }
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
-    lightedCell: activeCell
+    lightedCell: activeCell,
+    userFailure: userFailure
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_3__["GamePanel"], {
     startGame: startGame,
     gotcha: onGotchaClick
@@ -235,7 +262,7 @@ var App = function App() {
 /*!*********************************!*\
   !*** ./app/common/constants.js ***!
   \*********************************/
-/*! exports provided: MAX_N_BACK, ACTIVE_SQUARE_TIME, LIGHT_SQUARE_TIME, NO_ACTIVE_SQUARE_TIME, DEFAULT_GAME_SETTINGS */
+/*! exports provided: MAX_N_BACK, ACTIVE_SQUARE_TIME, LIGHT_SQUARE_TIME, NO_ACTIVE_SQUARE_TIME, USER_FAILURE_TIME, DEFAULT_GAME_SETTINGS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -244,11 +271,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ACTIVE_SQUARE_TIME", function() { return ACTIVE_SQUARE_TIME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LIGHT_SQUARE_TIME", function() { return LIGHT_SQUARE_TIME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NO_ACTIVE_SQUARE_TIME", function() { return NO_ACTIVE_SQUARE_TIME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "USER_FAILURE_TIME", function() { return USER_FAILURE_TIME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_GAME_SETTINGS", function() { return DEFAULT_GAME_SETTINGS; });
 var MAX_N_BACK = 10;
 var ACTIVE_SQUARE_TIME = 1000;
 var LIGHT_SQUARE_TIME = ACTIVE_SQUARE_TIME;
 var NO_ACTIVE_SQUARE_TIME = 300;
+var USER_FAILURE_TIME = 200;
 var DEFAULT_GAME_SETTINGS = {
   nBack: 1
 };
@@ -624,12 +653,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var GamePlay = function GamePlay(_ref) {
-  var lightedCell = _ref.lightedCell;
+  var lightedCell = _ref.lightedCell,
+      userFailure = _ref.userFailure;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay
+    className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay, " ").concat(userFailure ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_failure : "")
   }, [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (value) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " ").concat(lightedCell === value ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : ""),
+      className: "\n          ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " \n          ").concat(lightedCell === value ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : "", "\n          "),
       key: value
     });
   }));
@@ -748,10 +778,11 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n/*.box:hover {*/\n/*    cursor: pointer;*/\n/*}*/\n\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
+exports.push([module.i, "._-8dCCUHoibTAPOD1SfyGk {\n    flex: 60%;\n    display: grid;\n    justify-content: center;\n    grid-template-rows: 150px 150px 150px;\n    grid-template-columns: 150px 150px 150px;\n}\n\n.q6VXoxHriUw8F3YPD-_eI {\n    background: red;\n}\n\n._1xWxlGV6yGj7Bx8zSukd_g {\n    background: #444;\n    border: 1px solid #555;\n    color: #AAA;\n}\n\n\n._1X1iMl4uYPmbrLA01L_7Ev {\n    background: aqua;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"gamePlay": "_-8dCCUHoibTAPOD1SfyGk",
+	"gamePlay_failure": "q6VXoxHriUw8F3YPD-_eI",
 	"box": "_1xWxlGV6yGj7Bx8zSukd_g",
 	"box_active": "_1X1iMl4uYPmbrLA01L_7Ev"
 };
