@@ -12,3 +12,12 @@
     display: block;
     text-align: center;
 }
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
