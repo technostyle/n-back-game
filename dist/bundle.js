@@ -303,9 +303,13 @@ var App = function App() {
   };
 
   var onGotchaClick = function onGotchaClick() {
+    if (!prevNBack && !activeCell) {
+      return;
+    }
+
     if (prevNBack !== activeCell) {
       addUserError();
-    } else {
+    } else if (prevNBack === activeCell) {
       addUserSuccess();
       setShouldGotcha(false);
     }
