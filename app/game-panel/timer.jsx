@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./game-panel.css";
 
+const displayTwoDigits = integer => (integer > 9 ? integer : `0${integer}`);
+
 export const Timer = ({ time }) => {
   if (!time) {
     return <div className={styles.gamePanel__item}>Click Start</div>;
@@ -11,6 +13,8 @@ export const Timer = ({ time }) => {
   const seconds = Math.floor(totalSeconds) % 60;
 
   return (
-    <div className={styles.gamePanel__item}>{`${minutes} : ${seconds}`}</div>
+    <div className={styles.gamePanel__item}>
+      {`${displayTwoDigits(minutes)} : ${displayTwoDigits(seconds)}`}
+    </div>
   );
 };
