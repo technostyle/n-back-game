@@ -3,7 +3,7 @@ import { arrayFromOneToN } from "common/utils";
 import { MAX_N_BACK } from "common/constants";
 import styles from "./game-panel.css";
 
-export const NBackInput = ({ onChange }) => {
+export const NBackInput = ({ onChange, disabled }) => {
   const [value, setValue] = useState(1);
 
   const onSelect = event => {
@@ -23,7 +23,12 @@ export const NBackInput = ({ onChange }) => {
     <div className={styles.gamePanel__item}>
       <label>
         n-back:
-        <select name="n-backs" onChange={onSelect} value={value}>
+        <select
+          name="n-backs"
+          onChange={onSelect}
+          value={value}
+          disabled={disabled}
+        >
           {options}
         </select>
       </label>

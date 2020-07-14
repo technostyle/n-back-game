@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
   ACTIVE_SQUARE_TIME,
-  NO_ACTIVE_SQUARE_TIME,
   ROUND_TIME,
   ROUNDS,
-  DEFAULT_GAME_SETTINGS,
-  LIGHT_SQUARE_TIME,
-  MAX_N_BACK,
   USER_FAILURE_TIME,
   USER_SUCCESS_TIME
 } from "common/constants";
@@ -56,9 +52,9 @@ export const App = () => {
   useEffect(() => clearAsync, []);
 
   const addUserError = () => {
-    console.log("addUserError");
     setUserFailure(true);
     setGameErrors(gameErrors + 1);
+    setShouldGotcha(false);
     userFailureTimeouts.push(
       setTimeout(() => setUserFailure(false), USER_FAILURE_TIME)
     );
@@ -86,48 +82,62 @@ export const App = () => {
     }
   }, [timeLeft]);
 
-  const startGame = gameSettings => {
-    const { nBack } = gameSettings;
-    resetGame();
-    setPlay(true);
-    let gameTime = ROUNDS * ROUND_TIME;
+  const setCountdown = () => {
+    let gameTime = ROUND_TIME * ROUNDS;
     setTimeLeft(gameTime);
     timeLeftInterval = setInterval(() => {
       gameTime -= 1000;
       setTimeLeft(gameTime);
     }, 1000);
+  };
 
-    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
-    let time = 0;
-    for (let i = 0; i < ROUNDS; i++) {
-      time += LIGHT_SQUARE_TIME;
-      timeouts.push(
-        setTimeout(() => {
-          if (i >= nBack) {
-            setPrevNBack(activeBlocksSequence[i - nBack]);
-          }
-          setActiveCell(activeBlocksSequence[i]);
-          setShouldGotcha(
-            activeBlocksSequence[i - nBack] === activeBlocksSequence[i]
-          );
-        }, i * ROUND_TIME)
-      );
-      timeouts.push(
-        setTimeout(() => {
-          setActiveCell(null);
-        }, i * ROUND_TIME + ACTIVE_SQUARE_TIME)
-      );
+  const setRoundStart = (round, prevCell, curCell) => {
+    timeouts.push(
+      setTimeout(() => {
+        setPrevNBack(prevCell);
+        setActiveCell(curCell);
+        setShouldGotcha(prevCell === curCell);
+      }, round * ROUND_TIME)
+    );
+  };
+
+  const setRoundFinish = round => {
+    timeouts.push(
+      setTimeout(() => {
+        setActiveCell(null);
+      }, round * ROUND_TIME + ACTIVE_SQUARE_TIME)
+    );
+  };
+
+  const setGameStop = () => {
+    timeouts.push(setTimeout(() => setPlay(false), ROUNDS * ROUND_TIME));
+  };
+
+  const startGame = gameSettings => {
+    const { nBack } = gameSettings;
+    resetGame();
+    setPlay(true);
+    setCountdown();
+
+    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(1, 2));
+    for (let round = 0; round < ROUNDS; round++) {
+      const prevNBackToSet =
+        round >= nBack ? activeBlocksSequence[round - nBack] : null;
+      const activeCellToSet = activeBlocksSequence[round];
+      setRoundStart(round, prevNBackToSet, activeCellToSet);
+      setRoundFinish(round);
     }
+
+    setGameStop();
   };
 
   const onGotchaClick = () => {
-    if (!prevNBack)
-      if (prevNBack !== activeCell) {
-        addUserError();
-      } else {
-        addUserSuccess();
-        setShouldGotcha(false);
-      }
+    if (prevNBack !== activeCell) {
+      addUserError();
+    } else {
+      addUserSuccess();
+      setShouldGotcha(false);
+    }
   };
 
   const stopGame = () => resetGame();

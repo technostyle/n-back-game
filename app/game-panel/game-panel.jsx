@@ -22,7 +22,7 @@ export const GamePanel = ({
 
   return (
     <div className={styles.gamePanel}>
-      <NBackInput onChange={setNBack} />
+      <NBackInput onChange={setNBack} disabled={play} />
       <Timer time={timeLeft} />
       <Button text="Start" onClick={start} disabled={play} />
       <Button text="Stop" onClick={stopGame} disabled={!play} />
