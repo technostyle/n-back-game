@@ -119,7 +119,7 @@ export const App = () => {
     setPlay(true);
     setCountdown();
 
-    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 9));
+    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(1, 9));
     for (let round = 0; round < ROUNDS; round++) {
       const prevNBackToSet =
         round >= nBack ? activeBlocksSequence[round - nBack] : null;

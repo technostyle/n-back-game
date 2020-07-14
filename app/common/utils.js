@@ -11,7 +11,7 @@ export const arrayFromOtoN = n =>
   Array.apply(null, { length: n }).map(Number.call, Number);
 
 export const randInt = (min, max) =>
-  Math.round(min - 0.5 + Math.random() * (max - min + 1));
+  +Math.round(min - 0.5 + Math.random() * (max - min + 1));
 
 export const clearTimeouts = timeouts => {
   timeouts.forEach(clearTimeout);

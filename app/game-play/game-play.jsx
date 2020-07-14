@@ -10,7 +10,7 @@ export const GamePlay = ({ lightedCell, userFailure, userSuccess }) => {
         ${userSuccess ? styles.gamePlay_success : ""}
       `}
     >
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(value => (
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(value => (
         <div
           className={`
             ${styles.box} 
