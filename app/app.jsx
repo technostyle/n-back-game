@@ -5,7 +5,8 @@ import {
   LIGHT_SQUARE_TIME,
   MAX_N_BACK,
   NO_ACTIVE_SQUARE_TIME,
-  USER_FAILURE_TIME
+  USER_FAILURE_TIME,
+  USER_SUCCESS_TIME
 } from "common/constants";
 import { GamePlay } from "./game-play";
 import { GamePanel } from "./game-panel";
@@ -14,10 +15,11 @@ import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
 const ROUNDS = 20;
 const ROUND_TIME = LIGHT_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
-const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
+// const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
 // TODO: join round timeouts and userFailureTimeout?
 const timeouts = [];
 const userFailureTimeouts = [];
+const userSuccessTimeouts = [];
 let timeLeftInterval = null;
 // ---------------
 
@@ -28,12 +30,14 @@ export const App = () => {
   const [prevNBack, setPrevNBack] = useState(null);
   const [gameErrors, setGameErrors] = useState(0);
   const [userFailure, setUserFailure] = useState(false);
+  const [userSuccess, setUserSuccess] = useState(false);
   const [shouldGotcha, setShouldGotcha] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
 
   const clearAsync = () => {
     clearTimeouts(timeouts);
     clearTimeouts(userFailureTimeouts);
+    clearTimeouts(userSuccessTimeouts);
     if (timeLeftInterval) {
       clearInterval(timeLeftInterval);
     }
@@ -44,6 +48,7 @@ export const App = () => {
     setActiveCell(null);
     setPrevNBack(null);
     setUserFailure(false);
+    setUserSuccess(false);
     setShouldGotcha(false);
     setGameErrors(0);
     setTimeLeft(null);
@@ -56,6 +61,13 @@ export const App = () => {
     setGameErrors(gameErrors + 1);
     userFailureTimeouts.push(
       setTimeout(() => setUserFailure(false), USER_FAILURE_TIME)
+    );
+  };
+
+  const addUserSuccess = () => {
+    setUserSuccess(true);
+    userSuccessTimeouts.push(
+      setTimeout(() => setUserSuccess(false), USER_SUCCESS_TIME)
     );
   };
 
@@ -84,6 +96,7 @@ export const App = () => {
       setTimeLeft(gameTime);
     }, 1000);
 
+    const activeBlocksSequence = arrayFromOtoN(ROUNDS).map(() => randInt(0, 8));
     for (let i = 0; i < ROUNDS; i++) {
       time += LIGHT_SQUARE_TIME;
       timeouts.push(
@@ -109,6 +122,7 @@ export const App = () => {
     if (prevNBack !== activeCell) {
       addUserError();
     } else {
+      addUserSuccess();
       setShouldGotcha(false);
     }
   };
@@ -117,7 +131,11 @@ export const App = () => {
 
   return (
     <div className={styles.container}>
-      <GamePlay lightedCell={activeCell} userFailure={userFailure} />
+      <GamePlay
+        lightedCell={activeCell}
+        userFailure={userFailure}
+        userSuccess={userSuccess}
+      />
       <GamePanel
         timeLeft={timeLeft}
         startGame={startGame}

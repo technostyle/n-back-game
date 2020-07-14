@@ -3,6 +3,7 @@ export const ACTIVE_SQUARE_TIME = 1000;
 export const LIGHT_SQUARE_TIME = ACTIVE_SQUARE_TIME;
 export const NO_ACTIVE_SQUARE_TIME = 300;
 export const USER_FAILURE_TIME = 200;
+export const USER_SUCCESS_TIME = USER_FAILURE_TIME;
 export const DEFAULT_GAME_SETTINGS = {
   nBack: 1
 };
