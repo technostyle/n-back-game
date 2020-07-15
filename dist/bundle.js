@@ -152,13 +152,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
  // TODO: join round timeouts and userFailureTimeout?
 
-var timeouts = [];
+var roundTimeouts = [];
 var userFailureTimeouts = [];
 var userSuccessTimeouts = [];
-var timeLeftInterval = null; // ---------------
+var timeLeftInterval = null;
 
 var clearAsync = function clearAsync() {
-  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(timeouts);
+  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(roundTimeouts);
   Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
   Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userSuccessTimeouts);
 
@@ -241,8 +241,8 @@ var App = function App() {
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    // activeCell is not reset to null after box highlight
-    // and user did not click to reset shouldGotcha to false
+    // activeCell is reset to null after box highlight
+    // and user did not click gotcha to reset shouldGotcha to false
     if (!activeCell && shouldGotcha) {
       addUserError();
     }
@@ -264,7 +264,7 @@ var App = function App() {
   };
 
   var setRoundStart = function setRoundStart(round, prevCell, curCell) {
-    timeouts.push(setTimeout(function () {
+    roundTimeouts.push(setTimeout(function () {
       setPrevNBack(prevCell);
       setActiveCell(curCell);
       setShouldGotcha(prevCell === curCell);
@@ -272,13 +272,13 @@ var App = function App() {
   };
 
   var setRoundFinish = function setRoundFinish(round) {
-    timeouts.push(setTimeout(function () {
+    roundTimeouts.push(setTimeout(function () {
       setActiveCell(null);
     }, round * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"] + common_constants__WEBPACK_IMPORTED_MODULE_1__["ACTIVE_SQUARE_TIME"]));
   };
 
   var setGameStop = function setGameStop() {
-    timeouts.push(setTimeout(function () {
+    roundTimeouts.push(setTimeout(function () {
       return setPlay(false);
     }, common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"] * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"]));
   };

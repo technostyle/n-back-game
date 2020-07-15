@@ -12,14 +12,13 @@ import styles from "./app.css";
 import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
 // TODO: join round timeouts and userFailureTimeout?
-const timeouts = [];
+const roundTimeouts = [];
 const userFailureTimeouts = [];
 const userSuccessTimeouts = [];
 let timeLeftInterval = null;
-// ---------------
 
 const clearAsync = () => {
-  clearTimeouts(timeouts);
+  clearTimeouts(roundTimeouts);
   clearTimeouts(userFailureTimeouts);
   clearTimeouts(userSuccessTimeouts);
   if (timeLeftInterval) {
@@ -92,7 +91,7 @@ export const App = () => {
   };
 
   const setRoundStart = (round, prevCell, curCell) => {
-    timeouts.push(
+    roundTimeouts.push(
       setTimeout(() => {
         setPrevNBack(prevCell);
         setActiveCell(curCell);
@@ -102,7 +101,7 @@ export const App = () => {
   };
 
   const setRoundFinish = round => {
-    timeouts.push(
+    roundTimeouts.push(
       setTimeout(() => {
         setActiveCell(null);
       }, round * ROUND_TIME + ACTIVE_SQUARE_TIME)
@@ -110,7 +109,7 @@ export const App = () => {
   };
 
   const setGameStop = () => {
-    timeouts.push(setTimeout(() => setPlay(false), ROUNDS * ROUND_TIME));
+    roundTimeouts.push(setTimeout(() => setPlay(false), ROUNDS * ROUND_TIME));
   };
 
   const startGame = gameSettings => {
