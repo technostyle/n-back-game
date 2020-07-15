@@ -640,7 +640,7 @@ var NBackInput = function NBackInput(_ref) {
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _game_panel_css__WEBPACK_IMPORTED_MODULE_3___default.a.gamePanel__item
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, 'n-back: ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "n-back: ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
     className: _game_panel_css__WEBPACK_IMPORTED_MODULE_3___default.a.gamePanel__select,
     name: "n-backs",
     onChange: onSelect,
@@ -672,21 +672,18 @@ var displayTwoDigits = function displayTwoDigits(integer) {
   return integer > 9 ? integer : "0".concat(integer);
 };
 
-var Timer = function Timer(_ref) {
-  var time = _ref.time;
-
-  if (!time) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__timer)
-    }, "00 : 00");
-  }
-
-  var totalSeconds = Math.floor(time / 1000);
+var getDisplayTime = function getDisplayTime(ms) {
+  var totalSeconds = Number.isInteger(ms) ? Math.floor(ms / 1000) : 0;
   var minutes = Math.floor(totalSeconds / 60);
   var seconds = Math.floor(totalSeconds) % 60;
+  return "".concat(displayTwoDigits(minutes), " : ").concat(displayTwoDigits(seconds));
+};
+
+var Timer = function Timer(_ref) {
+  var time = _ref.time;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__timer)
-  }, "".concat(displayTwoDigits(minutes), " : ").concat(displayTwoDigits(seconds)));
+  }, getDisplayTime(time));
 };
 
 /***/ }),
