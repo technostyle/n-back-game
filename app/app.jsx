@@ -143,7 +143,7 @@ export const App = () => {
       setShouldGotcha(false);
     }
   };
-  
+
   return (
     <div className={styles.container}>
       <GamePlay

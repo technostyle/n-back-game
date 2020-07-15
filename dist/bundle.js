@@ -418,9 +418,10 @@ __webpack_require__.r(__webpack_exports__);
 var Button = function Button(_ref) {
   var text = _ref.text,
       onClick = _ref.onClick,
-      disabled = _ref.disabled;
+      disabled = _ref.disabled,
+      gotcha = _ref.gotcha;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(disabled ? "" : _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.clickable),
+    className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(disabled ? "" : _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.clickable, " ").concat(gotcha ? _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__gotcha : ""),
     onClick: onClick,
     disabled: disabled
   }, text);
@@ -533,7 +534,8 @@ var GamePanel = function GamePanel(_ref) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(game_panel_button__WEBPACK_IMPORTED_MODULE_2__["Button"], {
     text: "".concat(nBack, " back"),
     onClick: gotcha,
-    disabled: !play
+    disabled: !play,
+    gotcha: true
   }));
 };
 
@@ -638,7 +640,8 @@ var NBackInput = function NBackInput(_ref) {
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _game_panel_css__WEBPACK_IMPORTED_MODULE_3___default.a.gamePanel__item
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "n-back:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, 'n-back: ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    className: _game_panel_css__WEBPACK_IMPORTED_MODULE_3___default.a.gamePanel__select,
     name: "n-backs",
     onChange: onSelect,
     value: value,
@@ -818,11 +821,13 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n\n._2OeanlVVSFwshDl29TQF5R {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 100px;\n    margin: 20px auto;\n    display: block;\n    text-align: center;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ {\n    cursor: pointer;\n    outline: none;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ:hover {\n    cursor: pointer;\n    opacity: 0.7;\n}\n", ""]);
+exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n\n._2OeanlVVSFwshDl29TQF5R {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 120px;\n    height: 2em;\n    margin: 20px auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n._2lLUGyTbv4xkpe9MNIyGg6 {\n    width: 3em;\n    border: 1px solid pink;\n    outline: none;\n}\n\n._2ZVeZ0a2bviCQQh4IoUl1f {\n    margin: 60px auto;\n    height: 3em;\n}\n\n\n._25pt3oXib7mvkuSCl6PrNZ {\n    cursor: pointer;\n    outline: none;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ:hover {\n    cursor: pointer;\n    opacity: 0.7;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"gamePanel": "_3tkOQZRVGU-C8F6iazn33X",
 	"gamePanel__item": "_2OeanlVVSFwshDl29TQF5R",
+	"gamePanel__select": "_2lLUGyTbv4xkpe9MNIyGg6",
+	"gamePanel__gotcha": "_2ZVeZ0a2bviCQQh4IoUl1f",
 	"clickable": "_25pt3oXib7mvkuSCl6PrNZ"
 };
 module.exports = exports;

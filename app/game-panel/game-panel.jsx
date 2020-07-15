@@ -27,7 +27,7 @@ export const GamePanel = ({
       <Button text="Start" onClick={start} disabled={play} />
       <Button text="Stop" onClick={stopGame} disabled={!play} />
       <GameResults gameErrors={gameErrors} />
-      <Button text={`${nBack} back`} onClick={gotcha} disabled={!play} />
+      <Button text={`${nBack} back`} onClick={gotcha} disabled={!play} gotcha />
     </div>
   );
 };

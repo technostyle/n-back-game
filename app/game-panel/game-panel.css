@@ -7,11 +7,25 @@
     border-radius: 30%;
     background: aliceblue;
     color: deeppink;
-    width: 100px;
+    width: 120px;
+    height: 2em;
     margin: 20px auto;
-    display: block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.gamePanel__select {
+    width: 3em;
+    border: 1px solid pink;
+    outline: none;
+}
+
+.gamePanel__gotcha {
+    margin: 60px auto;
+    height: 3em;
+}
+
 
 .clickable {
     cursor: pointer;

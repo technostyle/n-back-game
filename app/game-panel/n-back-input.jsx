@@ -22,8 +22,9 @@ export const NBackInput = ({ onChange, disabled }) => {
   return (
     <div className={styles.gamePanel__item}>
       <label>
-        n-back:
+         {'n-back: '}
         <select
+            className={styles.gamePanel__select}
           name="n-backs"
           onChange={onSelect}
           value={value}
