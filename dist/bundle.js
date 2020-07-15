@@ -733,16 +733,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_play_css__WEBPACK_IMPORTED_MODULE_1__);
 
 
-var GamePlay = function GamePlay(_ref) {
-  var lightedCell = _ref.lightedCell,
-      userFailure = _ref.userFailure,
-      userSuccess = _ref.userSuccess;
+
+var Box = function Box(_ref) {
+  var isLighted = _ref.isLighted;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " ").concat(isLighted ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : "")
+  });
+};
+
+var GamePlay = function GamePlay(_ref2) {
+  var lightedCell = _ref2.lightedCell,
+      userFailure = _ref2.userFailure,
+      userSuccess = _ref2.userSuccess;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "\n        ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay, " \n        ").concat(userFailure ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_failure : "", "\n        ").concat(userSuccess ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_success : "", "\n      ")
-  }, [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (value) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "\n            ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " \n            ").concat(lightedCell === value ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : "", "\n          "),
-      key: value
+  }, [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (cell) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Box, {
+      isLighted: cell === lightedCell,
+      key: cell
     });
   }));
 };
