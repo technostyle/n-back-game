@@ -68,8 +68,8 @@ export const App = () => {
   };
 
   useEffect(() => {
-    // activeCell is not reset to null after box highlight
-    // and user did not click to reset shouldGotcha to false
+    // activeCell is reset to null after box highlight
+    // and user did not click gotcha to reset shouldGotcha to false
     if (!activeCell && shouldGotcha) {
       addUserError();
     }
