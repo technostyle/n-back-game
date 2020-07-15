@@ -24,8 +24,13 @@
 .gamePanel__gotcha {
     margin: 60px auto;
     height: 3em;
+    font-size: 1.1em;
+    color: #444444;
 }
 
+.gamePanel__timer {
+    font-size: 1.5em;
+}
 
 .clickable {
     cursor: pointer;

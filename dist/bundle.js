@@ -677,15 +677,15 @@ var Timer = function Timer(_ref) {
 
   if (!time) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item
-    }, "Click Start");
+      className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__timer)
+    }, "00 : 00");
   }
 
   var totalSeconds = Math.floor(time / 1000);
   var minutes = Math.floor(totalSeconds / 60);
   var seconds = Math.floor(totalSeconds) % 60;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item
+    className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__timer)
   }, "".concat(displayTwoDigits(minutes), " : ").concat(displayTwoDigits(seconds)));
 };
 
@@ -821,13 +821,14 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n\n._2OeanlVVSFwshDl29TQF5R {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 120px;\n    height: 2em;\n    margin: 20px auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n._2lLUGyTbv4xkpe9MNIyGg6 {\n    width: 3em;\n    border: 1px solid pink;\n    outline: none;\n}\n\n._2ZVeZ0a2bviCQQh4IoUl1f {\n    margin: 60px auto;\n    height: 3em;\n}\n\n\n._25pt3oXib7mvkuSCl6PrNZ {\n    cursor: pointer;\n    outline: none;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ:hover {\n    cursor: pointer;\n    opacity: 0.7;\n}\n", ""]);
+exports.push([module.i, "._3tkOQZRVGU-C8F6iazn33X {\n    flex: 20%;\n}\n\n._2OeanlVVSFwshDl29TQF5R {\n    border: 1px solid pink;\n    border-radius: 30%;\n    background: aliceblue;\n    color: deeppink;\n    width: 120px;\n    height: 2em;\n    margin: 20px auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n._2lLUGyTbv4xkpe9MNIyGg6 {\n    width: 3em;\n    border: 1px solid pink;\n    outline: none;\n}\n\n._2ZVeZ0a2bviCQQh4IoUl1f {\n    margin: 60px auto;\n    height: 3em;\n    font-size: 1.1em;\n    color: #444444;\n}\n\n.MrepZEtLIuez4SrP9Wtwr {\n    font-size: 1.5em;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ {\n    cursor: pointer;\n    outline: none;\n}\n\n._25pt3oXib7mvkuSCl6PrNZ:hover {\n    cursor: pointer;\n    opacity: 0.7;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"gamePanel": "_3tkOQZRVGU-C8F6iazn33X",
 	"gamePanel__item": "_2OeanlVVSFwshDl29TQF5R",
 	"gamePanel__select": "_2lLUGyTbv4xkpe9MNIyGg6",
 	"gamePanel__gotcha": "_2ZVeZ0a2bviCQQh4IoUl1f",
+	"gamePanel__timer": "MrepZEtLIuez4SrP9Wtwr",
 	"clickable": "_25pt3oXib7mvkuSCl6PrNZ"
 };
 module.exports = exports;
