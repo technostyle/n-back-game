@@ -6,10 +6,10 @@ import {
   USER_FAILURE_TIME,
   USER_SUCCESS_TIME
 } from "common/constants";
+import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 import { GamePlay } from "./game-play";
 import { GamePanel } from "./game-panel";
 import styles from "./app.css";
-import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
 const roundTimeouts = [];
 const userFailureTimeouts = [];

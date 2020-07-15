@@ -128,11 +128,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var common_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! common/constants */ "./app/common/constants.js");
-/* harmony import */ var _game_play__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game-play */ "./app/game-play/index.js");
-/* harmony import */ var _game_panel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game-panel */ "./app/game-panel/index.js");
-/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.css */ "./app/app.css");
-/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_app_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var common_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! common/utils */ "./app/common/utils.js");
+/* harmony import */ var common_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! common/utils */ "./app/common/utils.js");
+/* harmony import */ var _game_play__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./game-play */ "./app/game-play/index.js");
+/* harmony import */ var _game_panel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./game-panel */ "./app/game-panel/index.js");
+/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app.css */ "./app/app.css");
+/* harmony import */ var _app_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_app_css__WEBPACK_IMPORTED_MODULE_5__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -157,7 +157,7 @@ var userSuccessTimeouts = [];
 var timeLeftInterval = null;
 
 var clearAsync = function clearAsync() {
-  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])([].concat(roundTimeouts, userFailureTimeouts, userSuccessTimeouts));
+  Object(common_utils__WEBPACK_IMPORTED_MODULE_2__["clearTimeouts"])([].concat(roundTimeouts, userFailureTimeouts, userSuccessTimeouts));
 
   if (timeLeftInterval) {
     clearInterval(timeLeftInterval);
@@ -292,8 +292,8 @@ var App = function App() {
     resetGame();
     setPlay(true);
     setCountdown();
-    var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["arrayFromOtoN"])(common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"]).map(function () {
-      return Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["randInt"])(1, 9);
+    var activeBlocksSequence = Object(common_utils__WEBPACK_IMPORTED_MODULE_2__["arrayFromOtoN"])(common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"]).map(function () {
+      return Object(common_utils__WEBPACK_IMPORTED_MODULE_2__["randInt"])(1, 9);
     });
 
     for (var round = 0; round < common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"]; round++) {
@@ -320,12 +320,12 @@ var App = function App() {
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
+    className: _app_css__WEBPACK_IMPORTED_MODULE_5___default.a.container
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_3__["GamePlay"], {
     lightedCell: activeCell,
     userFailure: userFailure,
     userSuccess: userSuccess
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_3__["GamePanel"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_4__["GamePanel"], {
     timeLeft: timeLeft,
     startGame: startGame,
     stopGame: resetGame,
@@ -359,7 +359,7 @@ var NO_ACTIVE_SQUARE_TIME = 300;
 var ROUND_TIME = ACTIVE_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
 var USER_FAILURE_TIME = 200;
 var USER_SUCCESS_TIME = USER_FAILURE_TIME;
-var ROUNDS = 20;
+var ROUNDS = 25;
 
 /***/ }),
 
@@ -391,7 +391,7 @@ var arrayFromOtoN = function arrayFromOtoN(n) {
   }).map(Number.call, Number);
 };
 var randInt = function randInt(min, max) {
-  return +Math.round(min - 0.5 + Math.random() * (max - min + 1));
+  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
 };
 var clearTimeouts = function clearTimeouts(timeouts) {
   timeouts.forEach(clearTimeout);

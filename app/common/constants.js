@@ -5,4 +5,4 @@ export const ROUND_TIME = ACTIVE_SQUARE_TIME + NO_ACTIVE_SQUARE_TIME;
 export const USER_FAILURE_TIME = 200;
 export const USER_SUCCESS_TIME = USER_FAILURE_TIME;
 
-export const ROUNDS = 20;
+export const ROUNDS = 25;
