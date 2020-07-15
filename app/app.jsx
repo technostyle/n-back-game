@@ -143,9 +143,7 @@ export const App = () => {
       setShouldGotcha(false);
     }
   };
-
-  const stopGame = () => resetGame();
-
+  
   return (
     <div className={styles.container}>
       <GamePlay
@@ -156,7 +154,7 @@ export const App = () => {
       <GamePanel
         timeLeft={timeLeft}
         startGame={startGame}
-        stopGame={stopGame}
+        stopGame={resetGame}
         gotcha={onGotchaClick}
         gameErrors={gameErrors}
         play={play}

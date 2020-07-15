@@ -315,10 +315,6 @@ var App = function App() {
     }
   };
 
-  var stopGame = function stopGame() {
-    return resetGame();
-  };
-
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: _app_css__WEBPACK_IMPORTED_MODULE_4___default.a.container
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_play__WEBPACK_IMPORTED_MODULE_2__["GamePlay"], {
@@ -328,7 +324,7 @@ var App = function App() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_game_panel__WEBPACK_IMPORTED_MODULE_3__["GamePanel"], {
     timeLeft: timeLeft,
     startGame: startGame,
-    stopGame: stopGame,
+    stopGame: resetGame,
     gotcha: onGotchaClick,
     gameErrors: gameErrors,
     play: play
