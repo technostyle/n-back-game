@@ -729,15 +729,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GamePlay", function() { return GamePlay; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game-play.css */ "./app/game-play/game-play.css");
-/* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_game_play_css__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var common_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! common/utils */ "./app/common/utils.js");
+/* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./game-play.css */ "./app/game-play/game-play.css");
+/* harmony import */ var _game_play_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_game_play_css__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 
 var Box = function Box(_ref) {
   var isLighted = _ref.isLighted;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box, " ").concat(isLighted ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.box_active : "")
+    className: "".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_2___default.a.box, " ").concat(isLighted ? _game_play_css__WEBPACK_IMPORTED_MODULE_2___default.a.box_active : "")
   });
 };
 
@@ -746,8 +748,8 @@ var GamePlay = function GamePlay(_ref2) {
       userFailure = _ref2.userFailure,
       userSuccess = _ref2.userSuccess;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "\n        ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay, " \n        ").concat(userFailure ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_failure : "", "\n        ").concat(userSuccess ? _game_play_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePlay_success : "", "\n      ")
-  }, [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (cell) {
+    className: "\n        ".concat(_game_play_css__WEBPACK_IMPORTED_MODULE_2___default.a.gamePlay, " \n        ").concat(userFailure ? _game_play_css__WEBPACK_IMPORTED_MODULE_2___default.a.gamePlay_failure : "", "\n        ").concat(userSuccess ? _game_play_css__WEBPACK_IMPORTED_MODULE_2___default.a.gamePlay_success : "", "\n      ")
+  }, Object(common_utils__WEBPACK_IMPORTED_MODULE_1__["arrayFromOneToN"])(9).map(function (cell) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Box, {
       isLighted: cell === lightedCell,
       key: cell
