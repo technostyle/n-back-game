@@ -33,6 +33,9 @@ export const App = () => {
   const [shouldGotcha, setShouldGotcha] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
 
+  /* Component will unmount */
+  useEffect(() => clearAsync, []);
+
   const resetGame = () => {
     clearAsync();
     setPlay(false);
@@ -45,7 +48,22 @@ export const App = () => {
     setTimeLeft(null);
   };
 
-  useEffect(() => clearAsync, []);
+  /* Timer countdown handler */
+  useEffect(() => {
+    if (timeLeft && timeLeft < 1000) {
+      setTimeLeft(null);
+      clearInterval(timeLeftInterval);
+    }
+  }, [timeLeft]);
+
+  const setCountdown = () => {
+    let gameTime = ROUND_TIME * ROUNDS;
+    setTimeLeft(gameTime);
+    timeLeftInterval = setInterval(() => {
+      gameTime -= 1000;
+      setTimeLeft(gameTime);
+    }, 1000);
+  };
 
   const addUserError = () => {
     setUserFailure(true);
@@ -63,6 +81,7 @@ export const App = () => {
     );
   };
 
+  /* User missed n back cell */
   useEffect(() => {
     // activeCell is reset to null after box highlight
     // and user did not click gotcha to reset shouldGotcha to false
@@ -71,21 +90,6 @@ export const App = () => {
     }
   }, [shouldGotcha, activeCell]);
 
-  useEffect(() => {
-    if (timeLeft && timeLeft < 1000) {
-      setTimeLeft(null);
-      clearInterval(timeLeftInterval);
-    }
-  }, [timeLeft]);
-
-  const setCountdown = () => {
-    let gameTime = ROUND_TIME * ROUNDS;
-    setTimeLeft(gameTime);
-    timeLeftInterval = setInterval(() => {
-      gameTime -= 1000;
-      setTimeLeft(gameTime);
-    }, 1000);
-  };
 
   const setRoundStart = (round, prevCell, curCell) => {
     roundTimeouts.push(

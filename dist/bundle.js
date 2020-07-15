@@ -204,6 +204,12 @@ var App = function App() {
       _useState16 = _slicedToArray(_useState15, 2),
       timeLeft = _useState16[0],
       setTimeLeft = _useState16[1];
+  /* Component will unmount */
+
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    return clearAsync;
+  }, []);
 
   var resetGame = function resetGame() {
     clearAsync();
@@ -216,10 +222,24 @@ var App = function App() {
     setGameErrors(0);
     setTimeLeft(null);
   };
+  /* Timer countdown handler */
+
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    return clearAsync;
-  }, []);
+    if (timeLeft && timeLeft < 1000) {
+      setTimeLeft(null);
+      clearInterval(timeLeftInterval);
+    }
+  }, [timeLeft]);
+
+  var setCountdown = function setCountdown() {
+    var gameTime = common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"] * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"];
+    setTimeLeft(gameTime);
+    timeLeftInterval = setInterval(function () {
+      gameTime -= 1000;
+      setTimeLeft(gameTime);
+    }, 1000);
+  };
 
   var addUserError = function addUserError() {
     setUserFailure(true);
@@ -236,6 +256,8 @@ var App = function App() {
       return setUserSuccess(false);
     }, common_constants__WEBPACK_IMPORTED_MODULE_1__["USER_SUCCESS_TIME"]));
   };
+  /* User missed n back cell */
+
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     // activeCell is reset to null after box highlight
@@ -244,21 +266,6 @@ var App = function App() {
       addUserError();
     }
   }, [shouldGotcha, activeCell]);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    if (timeLeft && timeLeft < 1000) {
-      setTimeLeft(null);
-      clearInterval(timeLeftInterval);
-    }
-  }, [timeLeft]);
-
-  var setCountdown = function setCountdown() {
-    var gameTime = common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUND_TIME"] * common_constants__WEBPACK_IMPORTED_MODULE_1__["ROUNDS"];
-    setTimeLeft(gameTime);
-    timeLeftInterval = setInterval(function () {
-      gameTime -= 1000;
-      setTimeLeft(gameTime);
-    }, 1000);
-  };
 
   var setRoundStart = function setRoundStart(round, prevCell, curCell) {
     roundTimeouts.push(setTimeout(function () {
