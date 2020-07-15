@@ -11,16 +11,13 @@ import { GamePanel } from "./game-panel";
 import styles from "./app.css";
 import { arrayFromOtoN, randInt, clearTimeouts } from "common/utils";
 
-// TODO: join round timeouts and userFailureTimeout?
 const roundTimeouts = [];
 const userFailureTimeouts = [];
 const userSuccessTimeouts = [];
 let timeLeftInterval = null;
 
 const clearAsync = () => {
-  clearTimeouts(roundTimeouts);
-  clearTimeouts(userFailureTimeouts);
-  clearTimeouts(userSuccessTimeouts);
+  clearTimeouts([...roundTimeouts, ...userFailureTimeouts, ...userSuccessTimeouts]);
   if (timeLeftInterval) {
     clearInterval(timeLeftInterval);
   }

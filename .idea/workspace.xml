@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e41e2ec5-f271-42ab-99e0-480ae99e620d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app/app.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/bundle.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/dist/bundle.js.map" afterDir="false" />
     </list>
@@ -19,10 +20,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/app.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="145" selection-start-line="145" selection-end-line="145" />
+            <state relative-caret-position="119">
+              <caret line="112" column="17" selection-start-line="112" selection-start-column="17" selection-end-line="112" selection-end-column="17" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/index.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -36,8 +49,9 @@
       <find>fromOn</find>
       <find>userFailureTiemout</find>
       <find>userFailureTimeout</find>
-      <find>timeouts</find>
       <find>&lt;app</find>
+      <find>timeouts</find>
+      <find>timeouts.</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -74,13 +88,13 @@
         <option value="$PROJECT_DIR$/app/game-play/game-play.css" />
         <option value="$PROJECT_DIR$/app/common/utils.js" />
         <option value="$PROJECT_DIR$/app/game-panel/game-results.jsx" />
-        <option value="$PROJECT_DIR$/app/app.jsx" />
         <option value="$PROJECT_DIR$/app/game-panel/start-button.jsx" />
         <option value="$PROJECT_DIR$/app/game-panel/game-panel.jsx" />
         <option value="$PROJECT_DIR$/app/game-panel/game-panel.css" />
         <option value="$PROJECT_DIR$/app/game-panel/timer.jsx" />
         <option value="$PROJECT_DIR$/app/game-play/game-play.jsx" />
         <option value="$PROJECT_DIR$/app/game-panel/button.jsx" />
+        <option value="$PROJECT_DIR$/app/app.jsx" />
       </list>
     </option>
   </component>
@@ -107,12 +121,6 @@
               <item name="nback-game" type="b2602c69:ProjectViewProjectNode" />
               <item name="nback-game" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="nback-game" type="b2602c69:ProjectViewProjectNode" />
-              <item name="nback-game" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -164,7 +172,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23128000" />
+    <option name="totallyTimeSpent" value="23236000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
@@ -353,8 +361,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/app.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="145" selection-start-line="145" selection-end-line="145" />
+        <state relative-caret-position="119">
+          <caret line="112" column="17" selection-start-line="112" selection-start-column="17" selection-end-line="112" selection-end-column="17" />
           <folding>
             <element signature="e#0#51#0" expanded="true" />
           </folding>

@@ -150,7 +150,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
- // TODO: join round timeouts and userFailureTimeout?
 
 var roundTimeouts = [];
 var userFailureTimeouts = [];
@@ -158,9 +157,7 @@ var userSuccessTimeouts = [];
 var timeLeftInterval = null;
 
 var clearAsync = function clearAsync() {
-  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(roundTimeouts);
-  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userFailureTimeouts);
-  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])(userSuccessTimeouts);
+  Object(common_utils__WEBPACK_IMPORTED_MODULE_5__["clearTimeouts"])([].concat(roundTimeouts, userFailureTimeouts, userSuccessTimeouts));
 
   if (timeLeftInterval) {
     clearInterval(timeLeftInterval);
