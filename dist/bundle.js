@@ -309,7 +309,7 @@ var App = function App() {
 
     if (prevNBack !== activeCell) {
       addUserError();
-    } else if (prevNBack === activeCell) {
+    } else {
       addUserSuccess();
       setShouldGotcha(false);
     }
@@ -421,7 +421,7 @@ var Button = function Button(_ref) {
       disabled = _ref.disabled,
       gotcha = _ref.gotcha;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-    className: "".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(disabled ? "" : _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.clickable, " ").concat(gotcha ? _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__gotcha : ""),
+    className: "\n      ".concat(_game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__item, " ").concat(disabled ? "" : _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.clickable, " \n      ").concat(gotcha ? _game_panel_css__WEBPACK_IMPORTED_MODULE_1___default.a.gamePanel__gotcha : "", "\n    "),
     onClick: onClick,
     disabled: disabled
   }, text);

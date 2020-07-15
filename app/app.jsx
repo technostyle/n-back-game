@@ -138,7 +138,7 @@ export const App = () => {
 
     if (prevNBack !== activeCell) {
       addUserError();
-    } else if (prevNBack === activeCell) {
+    } else {
       addUserSuccess();
       setShouldGotcha(false);
     }
